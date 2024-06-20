@@ -1,4 +1,4 @@
-package repoauthor
+package author
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"

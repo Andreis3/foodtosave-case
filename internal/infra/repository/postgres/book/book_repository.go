@@ -1,4 +1,4 @@
-package repoauthor
+package book
 
 import (
 	"context"
@@ -72,6 +72,6 @@ func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) (*BookModel, 
 	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
-	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "groups", "select", duration)
+	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "select", duration)
 	return &group, nil
 }

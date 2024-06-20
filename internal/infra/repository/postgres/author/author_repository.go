@@ -1,4 +1,4 @@
-package repoauthor
+package author
 
 import (
 	"context"
@@ -43,7 +43,7 @@ func (r *AuthorRepository) InsertAuthor(data entity.Author) (*AuthorModel, *util
 	if errors.As(err, &r.PgError) {
 		return &AuthorModel{}, &util.ValidationError{
 			Code:        fmt.Sprintf("PIDB-%s", r.Code),
-			Origin:      "AuthorRepository.CreateGroup",
+			Origin:      "AuthorRepository.InsertAuthor",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
 			ClientError: []string{"Internal Server Error"},
@@ -51,7 +51,7 @@ func (r *AuthorRepository) InsertAuthor(data entity.Author) (*AuthorModel, *util
 	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
-	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "groups", "insert", duration)
+	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "insert", duration)
 	return &group, nil
 }
 func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *util.ValidationError) {
@@ -71,6 +71,6 @@ func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *
 	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
-	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "groups", "select", duration)
+	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "select", duration)
 	return &group, nil
 }
