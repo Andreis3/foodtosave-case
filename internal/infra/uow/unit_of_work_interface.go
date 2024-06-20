@@ -1,8 +1,6 @@
 package uow
 
-import (
-	"github.com/andreis3/stores-ms/internal/util"
-)
+import "github.com/andreis3/foodtosave-case/internal/util"
 
 type RepositoryFactory func(tx any) any
 

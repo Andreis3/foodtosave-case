@@ -2,13 +2,11 @@ package uow
 
 import (
 	"context"
+	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-
-	"github.com/andreis3/stores-ms/internal/infra/uow/interfaces"
-	"github.com/andreis3/stores-ms/internal/util"
 )
 
 const (
@@ -18,16 +16,16 @@ const (
 type UnitOfWork struct {
 	DB           *pgxpool.Pool
 	TX           pgx.Tx
-	Repositories map[string]iuow.RepositoryFactory
+	Repositories map[string]RepositoryFactory
 }
 
 func NewUnitOfWork(db *pgxpool.Pool) *UnitOfWork {
 	return &UnitOfWork{
 		DB:           db,
-		Repositories: make(map[string]iuow.RepositoryFactory),
+		Repositories: make(map[string]RepositoryFactory),
 	}
 }
-func (u *UnitOfWork) Register(name string, callback iuow.RepositoryFactory) {
+func (u *UnitOfWork) Register(name string, callback RepositoryFactory) {
 	u.Repositories[name] = callback
 }
 func (u *UnitOfWork) GetRepository(name string) any {
@@ -42,7 +40,7 @@ func (u *UnitOfWork) GetRepository(name string) any {
 	repo := u.Repositories[name](u.TX)
 	return repo
 }
-func (u *UnitOfWork) Do(callback func(uow iuow.IUnitOfWork) *util.ValidationError) *util.ValidationError {
+func (u *UnitOfWork) Do(callback func(uow IUnitOfWork) *util.ValidationError) *util.ValidationError {
 	ctx := context.Background()
 	if u.TX != nil {
 		return &util.ValidationError{
