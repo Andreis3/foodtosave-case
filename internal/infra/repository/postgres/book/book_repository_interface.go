@@ -5,7 +5,7 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
-type IGroupRepository interface {
+type IBookRepository interface {
 	InsertBook(data entity.Book, authorId string) (*BookModel, *util.ValidationError)
-	SelectAllBooksByAuthorID(authorId string) (*BookModel, *util.ValidationError)
+	SelectAllBooksByAuthorID(authorId string) ([]BookModel, *util.ValidationError)
 }

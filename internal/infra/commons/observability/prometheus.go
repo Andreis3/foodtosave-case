@@ -15,49 +15,62 @@ const (
 )
 
 type PrometheusAdapter struct {
-	counterConsumerContext           api.Int64Counter
-	histogramConsumerContextDuration api.Float64Histogram
-	histogramOperationTableDuration  api.Float64Histogram
+	counterRequestHttpStatusCode      api.Int64Counter
+	histogramRequestDuration          api.Float64Histogram
+	histogramInstructionTableDuration api.Float64Histogram
+	histogramOperationDuration        api.Float64Histogram
 }
 
 func NewPrometheusAdapter() *PrometheusAdapter {
 	exporter, _ := prometheus.New()
 	provider := metric.NewMeterProvider(metric.WithReader(exporter))
 	meter := provider.Meter(METER_NAME, api.WithInstrumentationVersion(METER_VERSION))
-	counterConsumerContext, _ := meter.Int64Counter("count_consumer_context",
-		api.WithDescription("Count total number messages by context"))
-	histogramConsumerContextDuration, _ := meter.Float64Histogram("consumer_duration_seconds",
-		api.WithDescription("Consumer duration in seconds"),
+	counterRequestHttpStatusCode, _ := meter.Int64Counter("proxy_requests_total",
+		api.WithDescription("Total number of proxy requests"))
+	histogramRequestDuration, _ := meter.Float64Histogram("request_duration_seconds",
+		api.WithDescription("Request duration in seconds"),
 		api.WithExplicitBucketBoundaries(5, 10, 15, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 5000, 10000, 20000, 30000))
-	histogramOperationTableDuration, _ := meter.Float64Histogram("instruction_table_duration_seconds",
+	histogramInstructionTableDuration, _ := meter.Float64Histogram("instruction_table_duration_seconds",
 		api.WithDescription("Instruction table duration in seconds"),
+		api.WithExplicitBucketBoundaries(5, 10, 15, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 5000, 10000, 20000, 30000))
+	histogramOperationDuration, _ := meter.Float64Histogram("operation_duration_seconds",
+		api.WithDescription("Operation duration in seconds"),
 		api.WithExplicitBucketBoundaries(5, 10, 15, 20, 30, 50, 100, 200, 300, 500, 1000, 2000, 5000, 10000, 20000, 30000))
 
 	return &PrometheusAdapter{
-		counterConsumerContext:           counterConsumerContext,
-		histogramConsumerContextDuration: histogramConsumerContextDuration,
-		histogramOperationTableDuration:  histogramOperationTableDuration,
+		counterRequestHttpStatusCode:      counterRequestHttpStatusCode,
+		histogramRequestDuration:          histogramRequestDuration,
+		histogramInstructionTableDuration: histogramInstructionTableDuration,
+		histogramOperationDuration:        histogramOperationDuration,
 	}
 }
-func (p *PrometheusAdapter) CounterConsumerContext(ctx context.Context, context, result string) {
+func (p *PrometheusAdapter) CounterRequestHttpStatusCode(ctx context.Context, router string, statusCode int) {
 	opt := api.WithAttributes(
-		attribute.Key("context").String(context),
-		attribute.Key("result").String(result),
+		attribute.Key("router").String(router),
+		attribute.Key("status_code").Int(statusCode),
 	)
-	p.counterConsumerContext.Add(ctx, 1, opt)
+	p.counterRequestHttpStatusCode.Add(ctx, 1, opt)
 }
-func (p *PrometheusAdapter) HistogramConsumerContextDuration(ctx context.Context, context, result string, duration float64) {
+func (p *PrometheusAdapter) HistogramRequestDuration(ctx context.Context, router string, statusCode int, duration float64) {
 	opt := api.WithAttributes(
-		attribute.Key("context").String(context),
-		attribute.Key("result").String(result),
+		attribute.Key("router").String(router),
+		attribute.Key("status_code").Int(statusCode),
 	)
-	p.histogramConsumerContextDuration.Record(ctx, duration, opt)
+	p.histogramRequestDuration.Record(ctx, duration, opt)
 }
-func (p *PrometheusAdapter) HistogramOperationTableDuration(ctx context.Context, database, table, method string, duration float64) {
+func (p *PrometheusAdapter) HistogramInstructionTableDuration(ctx context.Context, database, table, method string, duration float64) {
 	opt := api.WithAttributes(
 		attribute.Key("database").String(database),
 		attribute.Key("table").String(table),
 		attribute.Key("method").String(method),
 	)
-	p.histogramOperationTableDuration.Record(ctx, duration, opt)
+	p.histogramInstructionTableDuration.Record(ctx, duration, opt)
+}
+
+func (p *PrometheusAdapter) HistogramOperationDuration(ctx context.Context, operation string, context string, duration float64) {
+	opt := api.WithAttributes(
+		attribute.Key("operation").String(operation),
+		attribute.Key("context").String(context),
+	)
+	p.histogramOperationDuration.Record(ctx, duration, opt)
 }

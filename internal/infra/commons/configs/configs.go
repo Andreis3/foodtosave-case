@@ -1,32 +1,27 @@
 package configs
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/util"
 	"github.com/spf13/viper"
 )
 
 type Conf struct {
-	DBDriver            string `mapstructure:"DB_DRIVER"`
-	DBHost              string `mapstructure:"DB_HOST"`
-	DBPort              string `mapstructure:"DB_PORT"`
-	DBUser              string `mapstructure:"DB_USER"`
-	DBPassword          string `mapstructure:"DB_PASSWORD"`
-	DBName              string `mapstructure:"DB_NAME"`
-	ServerPort          string `mapstructure:"SERVER_PORT"`
-	MaxConnections      string `mapstructure:"MAX_CONNECTIONS"`
-	MinConnections      string `mapstructure:"MIN_CONNECTIONS"`
-	MaxConnLifetime     string `mapstructure:"MAX_CONN_LIFETIME"`
-	MaxConnIdleTime     string `mapstructure:"MAX_CONN_IDLE_TIME"`
-	Topic               string `mapstructure:"TOPIC"`
-	TopicDiff           string `mapstructure:"TOPIC_DIFF"`
-	Broker              string `mapstructure:"BROKER"`
-	Group               string `mapstructure:"GROUP"`
-	GroupID             string `mapstructure:"GROUP_ID"`
-	NumberBatchMessages string `mapstructure:"NUMBER_BATCH_MESSAGES"`
-	NumberWorkers       string `mapstructure:"NUMBER_WORKERS"`
+	ServerPort              string `mapstructure:"SERVER_PORT"`
+	PostgresHost            string `mapstructure:"POSTGRES_HOST"`
+	PostgresPort            string `mapstructure:"POSTGRES_PORT"`
+	PostgresUser            string `mapstructure:"POSTGRES_USER"`
+	PostgresPassword        string `mapstructure:"POSTGRES_PASSWORD"`
+	PostgresDBName          string `mapstructure:"POSTGRES_DB_NAME"`
+	PostgresMaxConnections  string `mapstructure:"POSTGRES_MAX_CONNECTIONS"`
+	PostgresMinConnections  string `mapstructure:"POSTGRES_MIN_CONNECTIONS"`
+	PostgresMaxConnLifetime string `mapstructure:"POSTGRES_MAX_CONN_LIFETIME"`
+	PostgresMaxConnIdleTime string `mapstructure:"POSTGRES_MAX_CONN_IDLE_TIME"`
+	RedisHost               string `mapstructure:"REDIS_HOST"`
+	RedisPort               string `mapstructure:"REDIS_PORT"`
+	RedisPassword           string `mapstructure:"REDIS_PASSWORD"`
+	RedisDB                 string `mapstructure:"REDIS_DB"`
 }
 
-func LoadConfig(path string) (*Conf, *util.Error) {
+func LoadConfig(path string) (*Conf, error) {
 	var cfg *Conf
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
@@ -36,32 +31,25 @@ func LoadConfig(path string) (*Conf, *util.Error) {
 	err := viper.ReadInConfig()
 	if err != nil {
 		cfg = &Conf{
-			DBHost:              viper.GetString("DB_HOST"),
-			DBPort:              viper.GetString("DB_PORT"),
-			DBUser:              viper.GetString("DB_USER"),
-			DBPassword:          viper.GetString("DB_PASSWORD"),
-			DBName:              viper.GetString("DB_NAME"),
-			ServerPort:          viper.GetString("SERVER_PORT"),
-			MaxConnections:      viper.GetString("MAX_CONNECTIONS"),
-			MinConnections:      viper.GetString("MIN_CONNECTIONS"),
-			MaxConnLifetime:     viper.GetString("MAX_CONN_LIFETIME"),
-			MaxConnIdleTime:     viper.GetString("MAX_CONN_IDLE_TIME"),
-			Topic:               viper.GetString("TOPIC"),
-			TopicDiff:           viper.GetString("TOPIC_DIFF"),
-			Broker:              viper.GetString("BROKER"),
-			Group:               viper.GetString("GROUP"),
-			GroupID:             viper.GetString("GROUP_ID"),
-			NumberBatchMessages: viper.GetString("NUMBER_BATCH_MESSAGES"),
-			NumberWorkers:       viper.GetString("NUMBER_WORKERS"),
+			ServerPort:              viper.GetString("SERVER_PORT"),
+			PostgresHost:            viper.GetString("POSTGRES_HOST"),
+			PostgresPort:            viper.GetString("POSTGRES_PORT"),
+			PostgresUser:            viper.GetString("POSTGRES_USER"),
+			PostgresPassword:        viper.GetString("POSTGRES_PASSWORD"),
+			PostgresDBName:          viper.GetString("POSTGRES_DB_NAME"),
+			PostgresMaxConnections:  viper.GetString("POSTGRES_MAX_CONNECTIONS"),
+			PostgresMinConnections:  viper.GetString("POSTGRES_MIN_CONNECTIONS"),
+			PostgresMaxConnLifetime: viper.GetString("POSTGRES_MAX_CONN_LIFETIME"),
+			PostgresMaxConnIdleTime: viper.GetString("POSTGRES_MAX_CONN_IDLE_TIME"),
+			RedisHost:               viper.GetString("REDIS_HOST"),
+			RedisPort:               viper.GetString("REDIS_PORT"),
+			RedisPassword:           viper.GetString("REDIS_PASSWORD"),
+			RedisDB:                 viper.GetString("REDIS_DB"),
 		}
 	}
 	err = viper.Unmarshal(&cfg)
 	if err != nil {
-		return nil, &util.Error{
-			Code:     "CFG-0001",
-			Origin:   "LoadConfig",
-			LogError: []string{err.Error()},
-		}
+		return nil, err
 	}
 	return cfg, nil
 }

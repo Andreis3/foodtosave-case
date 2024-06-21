@@ -26,3 +26,11 @@ func MapperBookModel(book entity.Book, authorId string) *BookModel {
 		UpdatedAt: &dateTime,
 	}
 }
+
+func (b *BookModel) ToEntity() entity.Book {
+	return entity.Book{
+		ID:     *b.ID,
+		Title:  *b.Title,
+		Gender: *b.Gender,
+	}
+}

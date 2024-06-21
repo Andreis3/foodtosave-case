@@ -55,12 +55,12 @@ func (r *BookRepository) InsertBook(data entity.Book, authorId string) (*BookMod
 	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "insert", duration)
 	return &group, nil
 }
-func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) (*BookModel, *util.ValidationError) {
+func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel, *util.ValidationError) {
 	start := time.Now()
 	query := `SELECT * FROM books WHERE author_id = $1`
 	rows, _ := r.DB.Query(context.Background(), query, authorId)
 	defer rows.Close()
-	group, err := pgx.CollectOneRow[BookModel](rows, pgx.RowToStructByName[BookModel])
+	group, err := pgx.CollectOneRow[[]BookModel](rows, pgx.RowToStructByName[[]BookModel])
 	if errors.As(err, &r.PgError) {
 		return nil, &util.ValidationError{
 			Code:        fmt.Sprintf("PIDB-%s", r.Code),
@@ -73,5 +73,5 @@ func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) (*BookModel, 
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "select", duration)
-	return &group, nil
+	return group, nil
 }

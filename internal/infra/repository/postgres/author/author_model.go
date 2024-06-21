@@ -24,3 +24,11 @@ func MapperAuthorModel(author entity.Author) *AuthorModel {
 		UpdatedAt:   &dateTime,
 	}
 }
+
+func (a *AuthorModel) ToEntity() entity.Author {
+	return entity.Author{
+		ID:          *a.ID,
+		Name:        *a.Name,
+		Nationality: *a.Nationality,
+	}
+}
