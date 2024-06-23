@@ -3,11 +3,11 @@ package authorhandler
 import (
 	"context"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/uuid"
-	"github.com/andreis3/foodtosave-case/internal/infra/make/command"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
+	dto2 "github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/factory/command"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 	"strings"
@@ -40,10 +40,10 @@ func NewCreateAuthorWithBooksHandler(
 func (cgc *CreateAuthorWithBooksHandler) CreateAuthorWithBooks(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	requestID := cgc.id.Generate()
-	createAuthorCommand := command.MakeCreateAuthorWithBooksCommand(cgc.postgres, cgc.redis, cgc.prometheus)
-	groupInputDTO, err := helpers.DecoderBodyRequest[*dto.AuthorInput](r)
+	createAuthorCommand := command.FactoryCreateAuthorWithBooksCommand(cgc.postgres, cgc.redis, cgc.prometheus)
+	groupInputDTO, err := helpers.DecoderBodyRequest[*dto2.AuthorInput](r)
 	if err != nil {
-		cgc.logger.ErrorJson("Create Author Error",
+		cgc.logger.ErrorJson("Create Author NotificationErrors",
 			"REQUEST_ID", requestID,
 			"CODE_ERROR", err.Code,
 			"ORIGIN", err.Origin,
@@ -57,7 +57,7 @@ func (cgc *CreateAuthorWithBooksHandler) CreateAuthorWithBooks(w http.ResponseWr
 	}
 	author, errCM := createAuthorCommand.Execute(*groupInputDTO)
 	if errCM != nil {
-		cgc.logger.ErrorJson("Create Group Error",
+		cgc.logger.ErrorJson("Create Group NotificationErrors",
 			"REQUEST_ID", requestID,
 			"CODE_ERROR", errCM.Code,
 			"ORIGIN", errCM.Origin,
@@ -73,5 +73,5 @@ func (cgc *CreateAuthorWithBooksHandler) CreateAuthorWithBooks(w http.ResponseWr
 	end := time.Now()
 	duration := end.Sub(start).Milliseconds()
 	cgc.prometheus.HistogramRequestDuration(context.Background(), helpers.CREATE_AUTHOR_V1, http.StatusCreated, float64(duration))
-	helpers.ResponseSuccess[dto.AuthorOutput](w, requestID, http.StatusCreated, author)
+	helpers.ResponseSuccess[dto2.AuthorOutput](w, requestID, http.StatusCreated, author)
 }

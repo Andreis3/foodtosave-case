@@ -5,7 +5,7 @@ package entity_test
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
-	"github.com/andreis3/foodtosave-case/internal/domain/notification"
+	"github.com/andreis3/foodtosave-case/internal/domain/errors"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -35,7 +35,7 @@ var _ = Describe("INTERNAL :: DOMAIN :: ENTITY :: BOOK", func() {
 
 				err := book.Validate()
 
-				Expect(err).To(Equal(&notification.Error{}))
+				Expect(err).To(Equal(&errors.NotificationErrors{}))
 				Expect(err.ReturnErrors()).To(HaveLen(0))
 			})
 		})

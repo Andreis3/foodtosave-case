@@ -2,7 +2,7 @@ package routes
 
 import (
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 

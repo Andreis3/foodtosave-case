@@ -1,20 +1,20 @@
 package entity
 
-import "github.com/andreis3/foodtosave-case/internal/domain/notification"
+import "github.com/andreis3/foodtosave-case/internal/domain/errors"
 
 type Author struct {
 	ID          string
 	Name        string
 	Nationality string
-	notification.Error
+	errors.NotificationErrors
 }
 
-func (a *Author) Validate() *notification.Error {
+func (a *Author) Validate() *errors.NotificationErrors {
 	if a.Name == "" {
 		a.AddErrors(`name: is required`)
 	}
 	if a.Nationality == "" {
 		a.AddErrors(`nationality: is required`)
 	}
-	return &a.Error
+	return &a.NotificationErrors
 }

@@ -3,9 +3,10 @@ package server
 import (
 	"errors"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/configs"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/redis"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/setup"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
@@ -22,8 +23,8 @@ func Start(conf *configs.Conf, log *logger.Logger) {
 		Addr:    fmt.Sprintf("0.0.0.0:%s", conf.ServerPort),
 		Handler: mux,
 	}
-	pool := db.NewPostgresDB(*conf)
-	redis := db.NewRedis(*conf)
+	pool := postgres.NewPostgresDB(*conf)
+	redis := redis.NewRedis(*conf)
 	go func() {
 		setup.SetupRoutesAndDependencies(mux, pool, redis, log)
 		end := time.Now()
@@ -31,7 +32,7 @@ func Start(conf *configs.Conf, log *logger.Logger) {
 		log.InfoText(fmt.Sprintf("Server started in %d ms", ms))
 		log.InfoText(fmt.Sprintf("Start server on port %s", conf.ServerPort))
 		if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
-			log.ErrorText(fmt.Sprintf("Error starting server: %s", err.Error()))
+			log.ErrorText(fmt.Sprintf("NotificationErrors starting server: %s", err.Error()))
 			os.Exit(util.EXIT_FAILURE)
 		}
 	}()

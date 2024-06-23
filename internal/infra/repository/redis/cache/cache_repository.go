@@ -3,8 +3,8 @@ package cache
 import (
 	"context"
 	"encoding/json"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"github.com/redis/go-redis/v9"
 	"time"
@@ -26,11 +26,11 @@ func (c *Cache) SetNX(key string, value any, ttl int) {
 	timeDuration := time.Duration(ttl) * time.Second
 	valueMarshal, errM := json.Marshal(value)
 	if errM != nil {
-		c.log.ErrorJson("Cache Marshal Error", "error", errM.Error())
+		c.log.ErrorJson("Cache Marshal NotificationErrors", "error", errM.Error())
 	}
 	err := c.client.SetNX(ctx, key, string(valueMarshal), timeDuration).Err()
 	if err != nil {
-		c.log.ErrorJson("Cache SetNX Error", "error", err.Error(), "code", "RC-500", "origin", "Cache.SetNX")
+		c.log.ErrorJson("Cache SetNX NotificationErrors", "error", err.Error(), "code", "RC-500", "origin", "Cache.SetNX")
 	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
@@ -53,7 +53,7 @@ func (c *Cache) Get(key string) (string, *util.ValidationError) {
 			Code:        "RC-501",
 			Origin:      "Cache.Get",
 			Status:      500,
-			ClientError: []string{"Internal Server Error"},
+			ClientError: []string{"Internal Server NotificationErrors"},
 			LogError:    []string{err.Error()},
 		}
 	}

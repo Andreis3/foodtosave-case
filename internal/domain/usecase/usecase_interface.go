@@ -1,8 +1,8 @@
-package services
+package usecase
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/dto"
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 

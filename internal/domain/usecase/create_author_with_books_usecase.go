@@ -1,40 +1,39 @@
-package services
+package usecase
 
 import (
 	"context"
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/dto"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/author"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"time"
 )
 
-type CreateAuthorService struct {
+type CreateAuthorWithBookUsecase struct {
 	uow     uow.IUnitOfWork
 	cache   cache.ICache
 	metrics observability.IMetricAdapter
-	output  dto.AuthorOutput
 }
 
-func NewAuthorService(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *CreateAuthorService {
-	return &CreateAuthorService{
+func NewCreateAuthorWithBookUsecase(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *CreateAuthorWithBookUsecase {
+	return &CreateAuthorWithBookUsecase{
 		uow:     uow,
 		cache:   cache,
 		metrics: metrics,
 	}
 }
-func (cas *CreateAuthorService) CreateAuthorWithBooks(data aggregate.AuthorBookAggregate) (dto.AuthorOutput, *util.ValidationError) {
+func (cas *CreateAuthorWithBookUsecase) CreateAuthorWithBooks(data aggregate.AuthorBookAggregate) (dto.AuthorOutput, *util.ValidationError) {
 	start := time.Now()
 	aggValidate := data.Validate()
 	if aggValidate.HasErrors() {
 		return dto.AuthorOutput{}, &util.ValidationError{
 			Code:        "VBR-0001",
-			Origin:      "CreateAuthorService.CreateAuthorWithBooks",
+			Origin:      "CreateAuthorWithBookUsecase.CreateAuthorWithBooks",
 			LogError:    aggValidate.ReturnErrors(),
 			ClientError: aggValidate.ReturnErrors(),
 			Status:      http.StatusBadRequest,

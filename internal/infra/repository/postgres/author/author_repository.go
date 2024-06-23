@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"time"
@@ -16,7 +16,7 @@ import (
 )
 
 type AuthorRepository struct {
-	DB *db.Queries
+	DB *postgres.Queries
 	*pgconn.PgError
 	metrics observability.IMetricAdapter
 }
@@ -46,7 +46,7 @@ func (r *AuthorRepository) InsertAuthor(data entity.Author) (*AuthorModel, *util
 			Origin:      "AuthorRepository.InsertAuthor",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
-			ClientError: []string{"Internal Server Error"},
+			ClientError: []string{"Internal Server NotificationErrors"},
 		}
 	}
 	end := time.Now()
@@ -69,7 +69,7 @@ func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *
 			Origin:      "AuthorRepository.SelectOneAuthorByID",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
-			ClientError: []string{"Internal Server Error"},
+			ClientError: []string{"Internal Server NotificationErrors"},
 		}
 	}
 	end := time.Now()

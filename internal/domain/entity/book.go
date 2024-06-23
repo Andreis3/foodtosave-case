@@ -1,6 +1,6 @@
 package entity
 
-import "github.com/andreis3/foodtosave-case/internal/domain/notification"
+import "github.com/andreis3/foodtosave-case/internal/domain/errors"
 
 type Book struct {
 	ID     string
@@ -8,16 +8,8 @@ type Book struct {
 	Gender string
 }
 
-func NewBook(id, title, gender string) *Book {
-	return &Book{
-		ID:     id,
-		Title:  title,
-		Gender: gender,
-	}
-}
-
-func (b *Book) Validate() *notification.Error {
-	err := notification.NewError()
+func (b *Book) Validate() *errors.NotificationErrors {
+	err := errors.NewNotificationErrors()
 	if b.Title == "" {
 		err.AddErrors(`title: is required`)
 	}

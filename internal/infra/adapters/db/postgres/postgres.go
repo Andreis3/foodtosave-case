@@ -1,10 +1,10 @@
-package db
+package postgres
 
 import (
 	"context"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/configs"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"os"
 	"strconv"
@@ -34,7 +34,7 @@ func NewPostgresDB(conf configs.Conf) *Postgres {
 		maxConnIdleTime, _ := strconv.Atoi(conf.PostgresMaxConnIdleTime)
 		connConfig, err := pgxpool.ParseConfig(connStr)
 		if err != nil {
-			log.ErrorText(fmt.Sprintf("Error parsing connection string: %v", err))
+			log.ErrorText(fmt.Sprintf("NotificationErrors parsing connection string: %v", err))
 			os.Exit(util.EXIT_FAILURE)
 		}
 		connConfig.MinConns = int32(minConns)
@@ -45,7 +45,7 @@ func NewPostgresDB(conf configs.Conf) *Postgres {
 		connConfig.ConnConfig.RuntimeParams["application_name"] = "store-ms"
 		pool, err = pgxpool.NewWithConfig(context.Background(), connConfig)
 		if err != nil {
-			log.ErrorText(fmt.Sprintf("Error creating connection pool: %v", err))
+			log.ErrorText(fmt.Sprintf("NotificationErrors creating connection pool: %v", err))
 			os.Exit(util.EXIT_FAILURE)
 		}
 	})

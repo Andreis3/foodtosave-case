@@ -1,8 +1,8 @@
-package db
+package redis
 
 import (
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/configs"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
 	"github.com/redis/go-redis/v9"
 	"strconv"
 )

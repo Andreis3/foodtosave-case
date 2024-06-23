@@ -3,8 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/redis"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"os"
@@ -13,7 +14,7 @@ import (
 	"time"
 )
 
-func gracefulShutdown(server *http.Server, pool *db.Postgres, redis *db.Redis, log *logger.Logger) {
+func gracefulShutdown(server *http.Server, pool *postgres.Postgres, redis *redis.Redis, log *logger.Logger) {
 	shutdownSignal := make(chan os.Signal, 1)
 	signal.Notify(shutdownSignal, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)
 	<-shutdownSignal
@@ -21,7 +22,7 @@ func gracefulShutdown(server *http.Server, pool *db.Postgres, redis *db.Redis, l
 	defer cancel()
 	log.InfoText("Initiating graceful shutdown...")
 	if err := server.Shutdown(ctx); err != nil {
-		log.ErrorText(fmt.Sprintf("Error during server shutdown: %s", err.Error()))
+		log.ErrorText(fmt.Sprintf("NotificationErrors during server shutdown: %s", err.Error()))
 	}
 	log.InfoText("Closing postgres connection...")
 	pool.Close()

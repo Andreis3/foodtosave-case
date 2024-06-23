@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"time"
@@ -16,7 +16,7 @@ import (
 )
 
 type BookRepository struct {
-	DB *db.Queries
+	DB *postgres.Queries
 	*pgconn.PgError
 	metrics observability.IMetricAdapter
 }
@@ -46,7 +46,7 @@ func (r *BookRepository) InsertBook(data entity.Book, authorId string) (*BookMod
 			Origin:      "BookRepository.InsertBook",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
-			ClientError: []string{"Internal Server Error"},
+			ClientError: []string{"Internal Server NotificationErrors"},
 		}
 	}
 	end := time.Now()
@@ -66,7 +66,7 @@ func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel,
 			Origin:      "BookRepository.SelectOneGroupByNameAndCode",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
-			ClientError: []string{"Internal Server Error"},
+			ClientError: []string{"Internal Server NotificationErrors"},
 		}
 	}
 	defer rows.Close()
@@ -80,7 +80,7 @@ func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel,
 				Origin:      "BookRepository.SelectAllBooksByAuthorID",
 				Status:      http.StatusInternalServerError,
 				LogError:    []string{err.Error()},
-				ClientError: []string{"Internal Server Error"},
+				ClientError: []string{"Internal Server NotificationErrors"},
 			}
 
 		}

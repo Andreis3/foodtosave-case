@@ -1,35 +1,35 @@
-package services
+package usecase
 
 import (
 	"context"
 	"encoding/json"
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/dto"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/author"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"time"
 )
 
-type GetOneAuthorAllBooksService struct {
+type GetOneAuthorAllBooksUsecase struct {
 	uow     uow.IUnitOfWork
 	cache   cache.ICache
 	metrics observability.IMetricAdapter
 }
 
-func NewGetOneService(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *GetOneAuthorAllBooksService {
-	return &GetOneAuthorAllBooksService{
+func NewGetOneAuthorAllBooksUsecase(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *GetOneAuthorAllBooksUsecase {
+	return &GetOneAuthorAllBooksUsecase{
 		uow:     uow,
 		cache:   cache,
 		metrics: metrics,
 	}
 }
-func (g *GetOneAuthorAllBooksService) GetOneAuthorAllBooks(id string) (dto.AuthorOutput, *util.ValidationError) {
+func (g *GetOneAuthorAllBooksUsecase) GetOneAuthorAllBooks(id string) (dto.AuthorOutput, *util.ValidationError) {
 	start := time.Now()
 	aggregateAuthor := new(aggregate.AuthorBookAggregate)
 	result, err := g.cache.Get(id)
@@ -54,7 +54,7 @@ func (g *GetOneAuthorAllBooksService) GetOneAuthorAllBooks(id string) (dto.Autho
 			g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)
 			return &util.ValidationError{
 				Code:        "VBR-0002",
-				Origin:      "GetOneAuthorAllBooksService.GetOneAuthorAllBooks",
+				Origin:      "GetOneAuthorAllBooksUsecase.GetOneAuthorAllBooks",
 				LogError:    []string{"Author not found"},
 				ClientError: []string{"Author not found"},
 				Status:      http.StatusNotFound,

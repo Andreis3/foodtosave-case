@@ -2,9 +2,9 @@ package aggregate
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
-	"github.com/andreis3/foodtosave-case/internal/domain/notification"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/uuid"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
+	"github.com/andreis3/foodtosave-case/internal/domain/errors"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
+	dto2 "github.com/andreis3/foodtosave-case/internal/infra/dto"
 )
 
 type AuthorBookAggregate struct {
@@ -24,7 +24,7 @@ func (a *AuthorBookAggregate) AddAuthorAndBooks(author entity.Author, books []en
 	a.Author = author
 	a.Books = books
 }
-func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto.AuthorInput) AuthorBookAggregate {
+func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto2.AuthorInput) AuthorBookAggregate {
 	a.Author = entity.Author{
 		ID:          a.uuidGenerator.Generate(),
 		Name:        input.Name,
@@ -40,8 +40,8 @@ func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto.AuthorInput) A
 	}
 	return *a
 }
-func (a *AuthorBookAggregate) MapperToDtoOutput() dto.AuthorOutput {
-	output := dto.AuthorOutput{
+func (a *AuthorBookAggregate) MapperToDtoOutput() dto2.AuthorOutput {
+	output := dto2.AuthorOutput{
 		ID:          a.Author.ID,
 		Name:        a.Author.Name,
 		Nationality: a.Author.Nationality,
@@ -60,7 +60,7 @@ func (a *AuthorBookAggregate) MapperToDtoOutput() dto.AuthorOutput {
 	}
 	return output
 }
-func (a *AuthorBookAggregate) Validate() *notification.Error {
+func (a *AuthorBookAggregate) Validate() *errors.NotificationErrors {
 	authorValidate := a.Author.Validate()
 	if len(a.Books) == 0 {
 		authorValidate.AddErrors("books: minimum 1 book is required")

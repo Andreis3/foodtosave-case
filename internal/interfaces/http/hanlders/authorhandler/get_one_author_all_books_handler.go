@@ -3,11 +3,11 @@ package authorhandler
 import (
 	"context"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
-	"github.com/andreis3/foodtosave-case/internal/infra/commons/uuid"
-	"github.com/andreis3/foodtosave-case/internal/infra/make/query"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
+	"github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/factory/query"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 	"strings"
@@ -39,11 +39,11 @@ func NewGetOneAuthorAllBooksHandler(
 
 func (ggc *GetOneAuthorAllBooksHandler) GetOneAuthorAllBooks(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-	getOneAuthorQuery := query.MakeGetOneAuthorAllBooksQuery(ggc.postgres, ggc.redis, ggc.prometheus)
+	getOneAuthorQuery := query.FactoryGetOneAuthorAllBooksQuery(ggc.postgres, ggc.redis, ggc.prometheus)
 	requestID := ggc.id.Generate()
 	err := helpers.PathRouterValidate(r, helpers.ID)
 	if err != nil {
-		ggc.logger.ErrorJson("Get Author Error",
+		ggc.logger.ErrorJson("Get Author NotificationErrors",
 			"REQUEST_ID", requestID,
 			"CODE_ERROR", err.Code,
 			"ORIGIN", err.Origin,
@@ -58,7 +58,7 @@ func (ggc *GetOneAuthorAllBooksHandler) GetOneAuthorAllBooks(w http.ResponseWrit
 	id := r.PathValue("id")
 	group, err := getOneAuthorQuery.Execute(id)
 	if err != nil {
-		ggc.logger.ErrorJson("Select One Group Error",
+		ggc.logger.ErrorJson("Select One Group NotificationErrors",
 			"REQUEST_ID", requestID,
 			"CODE_ERROR", err.Code,
 			"ORIGIN", err.Origin,
