@@ -6,7 +6,7 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/configs"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
-	"github.com/andreis3/foodtosave-case/internal/infra/proxy"
+	"github.com/andreis3/foodtosave-case/internal/infra/setup"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"os"
@@ -25,7 +25,7 @@ func Start(conf *configs.Conf, log *logger.Logger) {
 	pool := db.NewPostgresDB(*conf)
 	redis := db.NewRedis(*conf)
 	go func() {
-		proxy.ProxyDependency(mux, pool, redis, log)
+		setup.SetupRoutesAndDependencies(mux, pool, redis, log)
 		end := time.Now()
 		ms := end.Sub(start).Milliseconds()
 		log.InfoText(fmt.Sprintf("Server started in %d ms", ms))

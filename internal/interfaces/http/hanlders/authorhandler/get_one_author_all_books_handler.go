@@ -3,9 +3,9 @@ package authorhandler
 import (
 	"context"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/uuid"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
+	"github.com/andreis3/foodtosave-case/internal/infra/commons/uuid"
 	"github.com/andreis3/foodtosave-case/internal/infra/make/query"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"

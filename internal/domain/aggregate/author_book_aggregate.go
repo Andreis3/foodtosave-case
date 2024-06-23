@@ -3,7 +3,7 @@ package aggregate
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/domain/notification"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/uuid"
+	"github.com/andreis3/foodtosave-case/internal/infra/commons/uuid"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 )
 

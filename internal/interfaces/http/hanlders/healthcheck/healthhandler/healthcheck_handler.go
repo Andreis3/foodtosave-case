@@ -1,4 +1,4 @@
-package healthcheck_controller
+package healthhandler
 
 import (
 	"encoding/json"

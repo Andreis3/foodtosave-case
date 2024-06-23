@@ -1,7 +1,7 @@
-package metric_router
+package metricsrouter
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/util"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -13,14 +13,14 @@ type MetricsRoutes struct {
 func NewMetricRouter() *MetricsRoutes {
 	return &MetricsRoutes{}
 }
-func (r *MetricsRoutes) MetricRoutes() util.RouteType {
-	return util.RouteType{
+func (r *MetricsRoutes) MetricRoutes() helpers.RouteType {
+	return helpers.RouteType{
 		{
 			Method:      http.MethodGet,
 			Path:        "/metrics",
 			Controller:  promhttp.Handler(),
 			Description: "Metrics Prometheus",
-			Type:        util.HANDLER,
+			Type:        helpers.HANDLER,
 			Middlewares: []func(http.Handler) http.Handler{},
 		},
 	}

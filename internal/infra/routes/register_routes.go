@@ -3,7 +3,7 @@ package routes
 import (
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
-	"github.com/andreis3/foodtosave-case/internal/util"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -18,11 +18,11 @@ func NewRegisterRoutes(logger logger.ILogger) *RegisterRoutes {
 		logger: logger,
 	}
 }
-func (r *RegisterRoutes) Register(serverMux *chi.Mux, router util.RouteType) {
+func (r *RegisterRoutes) Register(serverMux *chi.Mux, router helpers.RouteType) {
 	message, info := "[RegisterRoutes] ", "MAPPED_ROUTER"
 	for _, route := range router {
 		switch route.Type {
-		case util.HANDLER:
+		case helpers.HANDLER:
 			switch len(route.Middlewares) > 0 {
 			case true:
 				methodAndPath := fmt.Sprintf("%s %s", route.Method, route.Path)
@@ -34,7 +34,7 @@ func (r *RegisterRoutes) Register(serverMux *chi.Mux, router util.RouteType) {
 				serverMux.Handle(methodAndPath, route.Controller.(http.Handler))
 			}
 
-		case util.HANDLER_FUNC:
+		case helpers.HANDLER_FUNC:
 			switch len(route.Middlewares) > 0 {
 			case true:
 				methodAndPath := fmt.Sprintf("%s %s", route.Method, route.Path)

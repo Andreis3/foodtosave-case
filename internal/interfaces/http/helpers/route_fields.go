@@ -1,6 +1,12 @@
-package util
+package helpers
 
 import "net/http"
+
+// Router types
+const (
+	HANDLER      = "handler"
+	HANDLER_FUNC = "handlerFunc"
+)
 
 type RouteType []RouteFields
 type RouteFields struct {
