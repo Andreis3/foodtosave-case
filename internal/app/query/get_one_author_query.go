@@ -8,7 +8,6 @@ import (
 
 type GetAuthorQuery struct {
 	getOneAuthorService services.IGetAuthorService
-	output              dto.AuthorOutput
 }
 
 func NewGetAuthorQuery(getOneAuthorService services.IGetAuthorService) *GetAuthorQuery {
@@ -22,5 +21,5 @@ func (c *GetAuthorQuery) Execute(id string) (dto.AuthorOutput, *util.ValidationE
 	if err != nil {
 		return dto.AuthorOutput{}, err
 	}
-	return c.output.MapperToAggregateAuthor(res), nil
+	return res, nil
 }

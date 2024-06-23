@@ -2,6 +2,7 @@ package author
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
@@ -12,11 +13,10 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/pkg/errors"
 )
 
 type AuthorRepository struct {
-	DB db.IInstructionDB
+	DB *db.Queries
 	*pgconn.PgError
 	metrics observability.IMetricAdapter
 }
@@ -56,10 +56,13 @@ func (r *AuthorRepository) InsertAuthor(data entity.Author) (*AuthorModel, *util
 }
 func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *util.ValidationError) {
 	start := time.Now()
-	query := `SELECT * FROM authors WHERE id = $1`
-	rows, _ := r.DB.Query(context.Background(), query, authorId)
+	var author AuthorModel
+	query := `SELECT id, name, nationality FROM authors WHERE id = $1`
+	rows, err := r.DB.Query(context.Background(), query, authorId)
 	defer rows.Close()
-	group, err := pgx.CollectOneRow[AuthorModel](rows, pgx.RowToStructByName[AuthorModel])
+	for rows.Next() {
+		err = rows.Scan(&author.ID, &author.Name, &author.Nationality)
+	}
 	if errors.As(err, &r.PgError) {
 		return nil, &util.ValidationError{
 			Code:        fmt.Sprintf("PIDB-%s", r.Code),
@@ -72,5 +75,5 @@ func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "select", duration)
-	return &group, nil
+	return &author, nil
 }

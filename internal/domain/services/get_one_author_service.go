@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
@@ -9,6 +10,7 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/author/dto"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"time"
@@ -18,6 +20,7 @@ type GetOneAuthorService struct {
 	uow     uow.IUnitOfWork
 	cache   cache.ICache
 	metrics observability.IMetricAdapter
+	output  dto.AuthorOutput
 }
 
 func NewGetOneService(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *GetOneAuthorService {
@@ -27,16 +30,17 @@ func NewGetOneService(uow uow.IUnitOfWork, cache cache.ICache, metrics observabi
 		metrics: metrics,
 	}
 }
-func (g *GetOneAuthorService) GetOneAuthor(id string) (aggregate.AuthorBookAggregate, *util.ValidationError) {
+func (g *GetOneAuthorService) GetOneAuthor(id string) (dto.AuthorOutput, *util.ValidationError) {
 	start := time.Now()
 	var aggregateAuthor aggregate.AuthorBookAggregate
 	result, err := g.cache.Get(id)
-	if err == nil {
-		aggregateAuthor = result.(aggregate.AuthorBookAggregate)
+	if err == nil && result != "" {
+		var output dto.AuthorOutput
+		_ = json.Unmarshal([]byte(result), &output)
 		end := time.Now()
 		duration := float64(end.Sub(start).Milliseconds())
 		g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)
-		return aggregateAuthor, nil
+		return output, nil
 	}
 	err = g.uow.Do(func(uow uow.IUnitOfWork) *util.ValidationError {
 		authorRepository := uow.GetRepository(util.AUTH_REPOSITORY_KEY).(author.IAuthorRepository)
@@ -66,11 +70,12 @@ func (g *GetOneAuthorService) GetOneAuthor(id string) (aggregate.AuthorBookAggre
 		return nil
 	})
 	if err != nil {
-		return aggregate.AuthorBookAggregate{}, err
+		return dto.AuthorOutput{}, err
 	}
-	go g.cache.Set(id, aggregateAuthor, 10)
+	output := g.output.MapperToAggregateAuthor(aggregateAuthor)
+	go g.cache.SetNX(id, output, 10)
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)
-	return aggregateAuthor, nil
+	return output, nil
 }

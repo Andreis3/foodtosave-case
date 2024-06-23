@@ -27,11 +27,11 @@ func NewPostgresDB(conf configs.Conf) *Postgres {
 	log := logger.NewLogger()
 	singleton.Do(func() {
 		connStr := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-			conf.DBHost, conf.DBPort, conf.DBUser, conf.DBPassword, conf.DBName)
-		maxConns, _ := strconv.Atoi(conf.MaxConnections)
-		minConns, _ := strconv.Atoi(conf.MinConnections)
-		maxConnLifetime, _ := strconv.Atoi(conf.MaxConnLifetime)
-		maxConnIdleTime, _ := strconv.Atoi(conf.MaxConnIdleTime)
+			conf.PostgresHost, conf.PostgresPort, conf.PostgresUser, conf.PostgresPassword, conf.PostgresDBName)
+		maxConns, _ := strconv.Atoi(conf.PostgresMaxConnections)
+		minConns, _ := strconv.Atoi(conf.PostgresMinConnections)
+		maxConnLifetime, _ := strconv.Atoi(conf.PostgresMaxConnLifetime)
+		maxConnIdleTime, _ := strconv.Atoi(conf.PostgresMaxConnIdleTime)
 		connConfig, err := pgxpool.ParseConfig(connStr)
 		if err != nil {
 			log.ErrorText(fmt.Sprintf("Error parsing connection string: %v", err))

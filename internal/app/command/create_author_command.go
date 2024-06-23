@@ -8,7 +8,6 @@ import (
 
 type CreateAuthorCommand struct {
 	authorService services.ICreateAuthorService
-	output        dto.AuthorOutput
 }
 
 func NewCreateGroupCommand(authorService services.ICreateAuthorService) *CreateAuthorCommand {
@@ -22,5 +21,5 @@ func (c *CreateAuthorCommand) Execute(data dto.AuthorInput) (dto.AuthorOutput, *
 	if err != nil {
 		return dto.AuthorOutput{}, err
 	}
-	return c.output.MapperToAggregateAuthor(res), nil
+	return res, nil
 }

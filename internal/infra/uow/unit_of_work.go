@@ -85,6 +85,9 @@ func (u *UnitOfWork) Rollback() *util.ValidationError {
 			Status:      http.StatusInternalServerError,
 		}
 	}
+	defer func() {
+		u.TX = nil
+	}()
 	ctx := context.Background()
 	err := u.TX.Rollback(ctx)
 	if err != nil {
@@ -96,11 +99,13 @@ func (u *UnitOfWork) Rollback() *util.ValidationError {
 			Status:      http.StatusInternalServerError,
 		}
 	}
-	u.TX = nil
 	return nil
 }
 func (u *UnitOfWork) CommitOrRollback() *util.ValidationError {
 	ctx := context.Background()
+	defer func() {
+		u.TX = nil
+	}()
 	if u.TX == nil {
 		return nil
 	}
@@ -115,6 +120,5 @@ func (u *UnitOfWork) CommitOrRollback() *util.ValidationError {
 			ClientError: []string{INTERNAL_SERVER_ERROR},
 			Status:      http.StatusInternalServerError}
 	}
-	u.TX = nil
 	return nil
 }

@@ -2,6 +2,7 @@ package book
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
@@ -12,11 +13,10 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
-	"github.com/pkg/errors"
 )
 
 type BookRepository struct {
-	DB db.IInstructionDB
+	DB *db.Queries
 	*pgconn.PgError
 	metrics observability.IMetricAdapter
 }
@@ -40,7 +40,6 @@ func (r *BookRepository) InsertBook(data entity.Book, authorId string) (*BookMod
 		model.UpdatedAt)
 	defer rows.Close()
 	group, err := pgx.CollectOneRow[BookModel](rows, pgx.RowToStructByName[BookModel])
-	//ERROR: duplicate key value violates unique constraint "groups_name_code_key" (SQLSTATE 23505)
 	if errors.As(err, &r.PgError) {
 		return &BookModel{}, &util.ValidationError{
 			Code:        fmt.Sprintf("PIDB-%s", r.Code),
@@ -57,10 +56,10 @@ func (r *BookRepository) InsertBook(data entity.Book, authorId string) (*BookMod
 }
 func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel, *util.ValidationError) {
 	start := time.Now()
-	query := `SELECT * FROM books WHERE author_id = $1`
-	rows, _ := r.DB.Query(context.Background(), query, authorId)
+	query := `SELECT id, title, gender FROM books WHERE author_id = $1`
+	var books []BookModel
+	rows, err := r.DB.Query(context.Background(), query, authorId)
 	defer rows.Close()
-	group, err := pgx.CollectOneRow[[]BookModel](rows, pgx.RowToStructByName[[]BookModel])
 	if errors.As(err, &r.PgError) {
 		return nil, &util.ValidationError{
 			Code:        fmt.Sprintf("PIDB-%s", r.Code),
@@ -70,8 +69,24 @@ func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel,
 			ClientError: []string{"Internal Server Error"},
 		}
 	}
+	defer rows.Close()
+	for rows.Next() {
+		book := BookModel{}
+		err = rows.Scan(&book.ID, &book.Title, &book.Gender)
+		books = append(books, book)
+		if err != nil {
+			return nil, &util.ValidationError{
+				Code:        "PIDB-0001",
+				Origin:      "BookRepository.SelectAllBooksByAuthorID",
+				Status:      http.StatusInternalServerError,
+				LogError:    []string{err.Error()},
+				ClientError: []string{"Internal Server Error"},
+			}
+
+		}
+	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "select", duration)
-	return group, nil
+	return books, nil
 }

@@ -6,8 +6,6 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
-
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 type Routes struct {
@@ -34,7 +32,6 @@ func (r *Routes) GroupRoutes() util.RouteType {
 			Type:        util.HANDLER_FUNC,
 			Middlewares: []func(http.Handler) http.Handler{
 				group_middleware.ValidatePath,
-				middleware.Logger,
 			},
 		},
 		{

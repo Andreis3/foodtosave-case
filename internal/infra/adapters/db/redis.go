@@ -14,9 +14,11 @@ type Redis struct {
 func NewRedis(conf configs.Conf) *Redis {
 	db, _ := strconv.Atoi(conf.RedisDB)
 	client := redis.NewClient(&redis.Options{
-		Addr:     fmt.Sprintf("%s:%s", conf.RedisHost, conf.RedisPort),
-		Password: conf.RedisPassword,
-		DB:       db,
+		Addr:         fmt.Sprintf("%s:%s", conf.RedisHost, conf.RedisPort),
+		Password:     conf.RedisPassword,
+		DB:           db,
+		PoolSize:     100,
+		MinIdleConns: 10,
 	})
 
 	return &Redis{

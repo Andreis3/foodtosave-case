@@ -5,6 +5,7 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/domain/services"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/uuid"
+	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"
@@ -13,9 +14,10 @@ import (
 )
 
 func MakeCreateAuthorCommand(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) command.ICreateAuthorCommand {
+	log := logger.NewLogger()
 	postgresPool := postgresDB.InstanceDB().(*pgxpool.Pool)
 	redisClient := redisDB.InstanceDB().(*redis.Client)
-	cache := cache.NewCache(redisClient, prometheus)
+	cache := cache.NewCache(redisClient, prometheus, log)
 	id := uuid.NewUUID()
 	unitOfWork := uow.NewProxyUnitOfWork(postgresPool, prometheus)
 	createAuthorService := services.NewAuthorService(unitOfWork, id, cache, prometheus)
