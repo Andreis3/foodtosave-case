@@ -1,8 +1,9 @@
 package uow
 
 import (
+	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/author"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/util"

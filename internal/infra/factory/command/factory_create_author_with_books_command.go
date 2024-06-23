@@ -2,10 +2,11 @@ package command
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/app/command"
+	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/domain/usecase"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"

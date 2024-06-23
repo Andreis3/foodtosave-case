@@ -3,8 +3,9 @@ package command
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
 	"github.com/andreis3/foodtosave-case/internal/domain/usecase"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
-	dto2 "github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/domain/uuid"
+	"github.com/andreis3/foodtosave-case/internal/infra/dto"
+
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
@@ -20,12 +21,12 @@ func NewCreateAuthorCommand(authorService usecase.ICreateAuthorWithBooksService,
 	}
 }
 
-func (c *CreateAuthorCommand) Execute(data dto2.AuthorInput) (dto2.AuthorOutput, *util.ValidationError) {
+func (c *CreateAuthorCommand) Execute(data dto.AuthorInput) (dto.AuthorOutput, *util.ValidationError) {
 	agg := aggregate.NewAuthorBookAggregate(c.uuidGenerator)
 	agg.MapperDtoInputToAggregate(data)
 	res, err := c.authorService.CreateAuthorWithBooks(*agg)
 	if err != nil {
-		return dto2.AuthorOutput{}, err
+		return dto.AuthorOutput{}, err
 	}
 	return res, nil
 }

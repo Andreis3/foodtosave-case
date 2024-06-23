@@ -3,8 +3,8 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"github.com/redis/go-redis/v9"
 	"time"

@@ -1,8 +1,8 @@
 package healthroutes
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/healthcheck/healthhandler"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/healthcheck/healthhandler"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 	"net/http"
 )
 

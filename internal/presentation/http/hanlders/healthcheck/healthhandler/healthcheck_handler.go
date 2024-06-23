@@ -3,7 +3,7 @@ package healthhandler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 	"net/http"
 	"runtime"
 	"time"

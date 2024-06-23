@@ -3,8 +3,8 @@ package aggregate
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/domain/errors"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
-	dto2 "github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/domain/uuid"
+	"github.com/andreis3/foodtosave-case/internal/infra/dto"
 )
 
 type AuthorBookAggregate struct {
@@ -24,7 +24,7 @@ func (a *AuthorBookAggregate) AddAuthorAndBooks(author entity.Author, books []en
 	a.Author = author
 	a.Books = books
 }
-func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto2.AuthorInput) AuthorBookAggregate {
+func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto.AuthorInput) AuthorBookAggregate {
 	a.Author = entity.Author{
 		ID:          a.uuidGenerator.Generate(),
 		Name:        input.Name,
@@ -40,8 +40,8 @@ func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto2.AuthorInput) 
 	}
 	return *a
 }
-func (a *AuthorBookAggregate) MapperToDtoOutput() dto2.AuthorOutput {
-	output := dto2.AuthorOutput{
+func (a *AuthorBookAggregate) MapperToDtoOutput() dto.AuthorOutput {
+	output := dto.AuthorOutput{
 		ID:          a.Author.ID,
 		Name:        a.Author.Name,
 		Nationality: a.Author.Nationality,

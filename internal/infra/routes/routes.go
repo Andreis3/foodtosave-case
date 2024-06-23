@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/authorroutes"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/healthcheck/healthroutes"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/observability/metricsroutes"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/authorhandler/authorroutes"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/healthcheck/healthroutes"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/observability/metricsroutes"
 	"github.com/go-chi/chi/v5"
 )
 

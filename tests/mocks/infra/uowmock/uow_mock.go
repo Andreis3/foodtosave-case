@@ -1,7 +1,7 @@
 package uowmock
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/infra/uow"
+	"github.com/andreis3/foodtosave-case/internal/domain/uow"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"github.com/stretchr/testify/mock"
 )

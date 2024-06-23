@@ -3,7 +3,7 @@ package routes
 import (
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"

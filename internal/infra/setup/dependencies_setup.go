@@ -6,7 +6,7 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/common/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/factory/handler"
 	"github.com/andreis3/foodtosave-case/internal/infra/routes"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/authorroutes"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/authorhandler/authorroutes"
 	"github.com/go-chi/chi/v5"
 )
 
