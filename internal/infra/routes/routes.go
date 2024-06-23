@@ -1,7 +1,7 @@
 package routes
 
 import (
-	author_routes "github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/author/routes"
+	author_routes "github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/routes"
 	healthcheck_routes "github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/healthcheck/routes"
 	metric_router "github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/observability/routes"
 	"github.com/go-chi/chi/v5"

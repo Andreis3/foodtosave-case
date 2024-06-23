@@ -10,29 +10,28 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/author/dto"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"time"
 )
 
-type GetOneAuthorService struct {
+type GetOneAuthorAllBooksService struct {
 	uow     uow.IUnitOfWork
 	cache   cache.ICache
 	metrics observability.IMetricAdapter
-	output  dto.AuthorOutput
 }
 
-func NewGetOneService(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *GetOneAuthorService {
-	return &GetOneAuthorService{
+func NewGetOneService(uow uow.IUnitOfWork, cache cache.ICache, metrics observability.IMetricAdapter) *GetOneAuthorAllBooksService {
+	return &GetOneAuthorAllBooksService{
 		uow:     uow,
 		cache:   cache,
 		metrics: metrics,
 	}
 }
-func (g *GetOneAuthorService) GetOneAuthor(id string) (dto.AuthorOutput, *util.ValidationError) {
+func (g *GetOneAuthorAllBooksService) GetOneAuthorAllBooks(id string) (dto.AuthorOutput, *util.ValidationError) {
 	start := time.Now()
-	var aggregateAuthor aggregate.AuthorBookAggregate
+	aggregateAuthor := new(aggregate.AuthorBookAggregate)
 	result, err := g.cache.Get(id)
 	if err == nil && result != "" {
 		var output dto.AuthorOutput
@@ -50,9 +49,12 @@ func (g *GetOneAuthorService) GetOneAuthor(id string) (dto.AuthorOutput, *util.V
 			return err
 		}
 		if authorResult.ID == nil {
+			end := time.Now()
+			duration := float64(end.Sub(start).Milliseconds())
+			g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)
 			return &util.ValidationError{
 				Code:        "VBR-0002",
-				Origin:      "GetOneAuthorService.GetAuthor",
+				Origin:      "GetOneAuthorAllBooksService.GetOneAuthorAllBooks",
 				LogError:    []string{"Author not found"},
 				ClientError: []string{"Author not found"},
 				Status:      http.StatusNotFound,
@@ -66,13 +68,13 @@ func (g *GetOneAuthorService) GetOneAuthor(id string) (dto.AuthorOutput, *util.V
 		for _, book := range booksResult {
 			booksEntity = append(booksEntity, book.ToEntity())
 		}
-		aggregateAuthor = aggregateAuthor.SetIDS(authorResult.ToEntity(), booksEntity)
+		aggregateAuthor.AddAuthorAndBooks(authorResult.ToEntity(), booksEntity)
 		return nil
 	})
 	if err != nil {
 		return dto.AuthorOutput{}, err
 	}
-	output := g.output.MapperToAggregateAuthor(aggregateAuthor)
+	output := aggregateAuthor.MapperToDtoOutput()
 	go g.cache.SetNX(id, output, 10)
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())

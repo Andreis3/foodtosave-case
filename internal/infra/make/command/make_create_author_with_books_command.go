@@ -13,14 +13,14 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func MakeCreateAuthorCommand(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) command.ICreateAuthorCommand {
+func MakeCreateAuthorWithBooksCommand(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) command.ICreateAuthorCommand {
 	log := logger.NewLogger()
 	postgresPool := postgresDB.InstanceDB().(*pgxpool.Pool)
 	redisClient := redisDB.InstanceDB().(*redis.Client)
 	cache := cache.NewCache(redisClient, prometheus, log)
-	id := uuid.NewUUID()
+	uuidGenerator := uuid.NewUUID()
 	unitOfWork := uow.NewProxyUnitOfWork(postgresPool, prometheus)
-	createAuthorService := services.NewAuthorService(unitOfWork, id, cache, prometheus)
-	createAuthorCommand := command.NewCreateGroupCommand(createAuthorService)
+	createAuthorService := services.NewAuthorService(unitOfWork, cache, prometheus)
+	createAuthorCommand := command.NewCreateAuthorCommand(createAuthorService, uuidGenerator)
 	return createAuthorCommand
 }

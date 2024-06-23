@@ -8,6 +8,14 @@ type Book struct {
 	Gender string
 }
 
+func NewBook(id, title, gender string) *Book {
+	return &Book{
+		ID:     id,
+		Title:  title,
+		Gender: gender,
+	}
+}
+
 func (b *Book) Validate() *notification.Error {
 	err := notification.NewError()
 	if b.Title == "" {

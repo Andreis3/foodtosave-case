@@ -1,4 +1,4 @@
-package handler_author
+package authorhandler
 
 import (
 	"context"
@@ -7,14 +7,14 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/make/command"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/author/dto"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 	"strings"
 	"time"
 )
 
-type CreateAuthorHandler struct {
+type CreateAuthorWithBooksHandler struct {
 	logger     logger.ILogger
 	id         uuid.IUUID
 	prometheus observability.IMetricAdapter
@@ -22,13 +22,13 @@ type CreateAuthorHandler struct {
 	redis      db.IDatabase
 }
 
-func NewCreateAuthorHandler(
+func NewCreateAuthorWithBooksHandler(
 	postgres db.IDatabase,
 	redis db.IDatabase,
 	prometheus observability.IMetricAdapter,
 	logger logger.ILogger,
-	id uuid.IUUID) *CreateAuthorHandler {
-	return &CreateAuthorHandler{
+	id uuid.IUUID) *CreateAuthorWithBooksHandler {
+	return &CreateAuthorWithBooksHandler{
 		logger:     logger,
 		id:         id,
 		prometheus: prometheus,
@@ -37,10 +37,10 @@ func NewCreateAuthorHandler(
 	}
 }
 
-func (cgc *CreateAuthorHandler) CreateAuthor(w http.ResponseWriter, r *http.Request) {
+func (cgc *CreateAuthorWithBooksHandler) CreateAuthorWithBooks(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	requestID := cgc.id.Generate()
-	createAuthorCommand := command.MakeCreateAuthorCommand(cgc.postgres, cgc.redis, cgc.prometheus)
+	createAuthorCommand := command.MakeCreateAuthorWithBooksCommand(cgc.postgres, cgc.redis, cgc.prometheus)
 	groupInputDTO, err := helpers.DecoderBodyRequest[*dto.AuthorInput](r)
 	if err != nil {
 		cgc.logger.ErrorJson("Create Author Error",

@@ -5,12 +5,12 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/uuid"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/author"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler"
 )
 
-func MakeGetOneGroupHandler(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) handler_author.IGetOneAuthorHandler {
+func MakeGetOneAuthorAllBooksHandler(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) authorhandler.IGetOneAuthorHandler {
 	log := logger.NewLogger()
 	requestID := uuid.NewUUID()
-	searchGroupController := handler_author.NewGetOneGroupHandler(postgresDB, redisDB, prometheus, log, requestID)
+	searchGroupController := authorhandler.NewGetOneAuthorAllBooksHandler(postgresDB, redisDB, prometheus, log, requestID)
 	return searchGroupController
 }

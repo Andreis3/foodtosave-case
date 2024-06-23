@@ -1,4 +1,4 @@
-package handler_author
+package authorhandler
 
 import (
 	"context"
@@ -7,14 +7,14 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/commons/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/make/query"
-	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/author/dto"
+	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler/dto"
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/helpers"
 	"net/http"
 	"strings"
 	"time"
 )
 
-type GetOneAuthorHandler struct {
+type GetOneAuthorAllBooksHandler struct {
 	logger     logger.ILogger
 	prometheus observability.IMetricAdapter
 	id         uuid.IUUID
@@ -22,13 +22,13 @@ type GetOneAuthorHandler struct {
 	redis      db.IDatabase
 }
 
-func NewGetOneGroupHandler(
+func NewGetOneAuthorAllBooksHandler(
 	postgres db.IDatabase,
 	redis db.IDatabase,
 	prometheus observability.IMetricAdapter,
 	logger logger.ILogger,
-	id uuid.IUUID) *GetOneAuthorHandler {
-	return &GetOneAuthorHandler{
+	id uuid.IUUID) *GetOneAuthorAllBooksHandler {
+	return &GetOneAuthorAllBooksHandler{
 		logger:     logger,
 		prometheus: prometheus,
 		id:         id,
@@ -37,9 +37,9 @@ func NewGetOneGroupHandler(
 	}
 }
 
-func (ggc *GetOneAuthorHandler) GetOneAuthor(w http.ResponseWriter, r *http.Request) {
+func (ggc *GetOneAuthorAllBooksHandler) GetOneAuthorAllBooks(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
-	getOneAuthorQuery := query.MakeGetOneAuthorQuery(ggc.postgres, ggc.redis, ggc.prometheus)
+	getOneAuthorQuery := query.MakeGetOneAuthorAllBooksQuery(ggc.postgres, ggc.redis, ggc.prometheus)
 	requestID := ggc.id.Generate()
 	err := helpers.PathRouterValidate(r, helpers.ID)
 	if err != nil {

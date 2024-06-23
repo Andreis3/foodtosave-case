@@ -12,7 +12,7 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func MakeGetOneAuthorQuery(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) query.IGetOneAuthorQuery {
+func MakeGetOneAuthorAllBooksQuery(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) query.IGetOneAuthorQuery {
 	log := logger.NewLogger()
 	postgresPool := postgresDB.InstanceDB().(*pgxpool.Pool)
 	redisClient := redisDB.InstanceDB().(*redis.Client)
