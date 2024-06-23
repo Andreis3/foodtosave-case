@@ -1,4 +1,4 @@
-package group_middleware
+package middleware
 
 import (
 	"fmt"

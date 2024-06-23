@@ -8,9 +8,9 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler"
 )
 
-func MakeCreateAuthorHandler(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) authorhandler.ICreateAuthorHandler {
+func MakeCreateAuthorHandler(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) authorhandler.CreateAuthorWithBooksHandler {
 	log := logger.NewLogger()
 	requestID := uuid.NewUUID()
 	createGroupHandler := authorhandler.NewCreateAuthorWithBooksHandler(postgresDB, redisDB, prometheus, log, requestID)
-	return createGroupHandler
+	return *createGroupHandler
 }

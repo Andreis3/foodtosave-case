@@ -8,9 +8,9 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/interfaces/http/hanlders/authorhandler"
 )
 
-func MakeGetOneAuthorAllBooksHandler(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) authorhandler.IGetOneAuthorHandler {
+func MakeGetOneAuthorAllBooksHandler(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) authorhandler.GetOneAuthorAllBooksHandler {
 	log := logger.NewLogger()
 	requestID := uuid.NewUUID()
 	searchGroupController := authorhandler.NewGetOneAuthorAllBooksHandler(postgresDB, redisDB, prometheus, log, requestID)
-	return searchGroupController
+	return *searchGroupController
 }
