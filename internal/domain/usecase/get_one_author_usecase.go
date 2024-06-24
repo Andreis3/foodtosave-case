@@ -72,7 +72,8 @@ func (g *GetOneAuthorUsecase) GetOneAuthorAllBooks(id string) (aggregate.AuthorB
 	if err != nil {
 		return aggregate.AuthorBookAggregate{}, err
 	}
-	go g.cache.Set(id, agg, 10)
+	ttlCache := 10
+	go g.cache.Set(id, agg, ttlCache)
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)
