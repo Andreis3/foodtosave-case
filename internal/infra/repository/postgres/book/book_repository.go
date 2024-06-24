@@ -63,7 +63,7 @@ func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel,
 			Origin:      "BookRepository.SelectOneGroupByNameAndCode",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
-			ClientError: []string{"Internal Server NotificationErrors"},
+			ClientError: []string{"Internal Server"},
 		}
 	}
 	defer rows.Close()

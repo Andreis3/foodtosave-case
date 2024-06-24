@@ -10,6 +10,12 @@ unit-tests-report:
 	&& go tool cover -html=coverage/cover.out -o coverage/cover.html \
 	&& go tool cover -func=coverage/cover.out -o coverage/cover.functions.html
 
+docker-up:
+	@docker compose -f docker-compose.yml up -d --build
+
+docker-down:
+	@docker compose -f docker-compose.yml down
+
 integration-tests:
 	@go test ./tests/integration/... --tags=integration -v -count=1
 .PHONY: run-app,
@@ -17,3 +23,5 @@ integration-tests:
 		unit-tests-cover,
 		unit-tests-report,
 		integration-tests,
+		docker-dev,
+		docker-down,

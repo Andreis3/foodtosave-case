@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	INTERNAL_SERVER_ERROR = "Internal Server NotificationErrors"
+	INTERNAL_SERVER_ERROR = "Internal Server"
 )
 
 type UnitOfWork struct {

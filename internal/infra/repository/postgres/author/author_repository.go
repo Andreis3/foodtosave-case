@@ -48,7 +48,7 @@ func (r *AuthorRepository) InsertAuthor(data entity.Author) (string, *util.Valid
 	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
-	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "insert", duration)
+	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "author", "insert", duration)
 	return auhtorId, nil
 }
 func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *util.ValidationError) {
@@ -66,11 +66,11 @@ func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *
 			Origin:      "AuthorRepository.SelectOneAuthorByID",
 			Status:      http.StatusInternalServerError,
 			LogError:    []string{fmt.Sprintf("%s, %s", r.Message, r.Detail)},
-			ClientError: []string{"Internal Server NotificationErrors"},
+			ClientError: []string{"Internal Server"},
 		}
 	}
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
-	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "select", duration)
+	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "author", "select", duration)
 	return &author, nil
 }
