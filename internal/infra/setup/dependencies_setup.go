@@ -11,10 +11,9 @@ import (
 )
 
 func SetupRoutesAndDependencies(mux *chi.Mux, postgres db.IDatabase, redis db.IDatabase, logger logger.ILogger) {
-	registerRouter := routes.NewRegisterRoutes(logger)
 	prometheus := observability.NewPrometheusAdapter()
 	createAuthorHandler := make_handler.FactoryCreateAuthorHandler(postgres, redis, prometheus)
 	getOneAuthorHandler := make_handler.FactoryGetOneAuthorAllBooksHandler(postgres, redis, prometheus)
 	auhtorRouter := authorroutes.NewAuthorRoutes(createAuthorHandler, getOneAuthorHandler)
-	routes.NewRoutes(mux, *registerRouter, *auhtorRouter).RegisterRoutes()
+	routes.NewRegisterRoutes(mux, *auhtorRouter, logger).RegisterRoutes()
 }

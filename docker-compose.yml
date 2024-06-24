@@ -13,7 +13,7 @@ services:
         - redis
     env_file:
       - .env.dev
-    entrypoint: ["/go/bin/author-ms"]
+    entrypoint: ["/go/bin/foodtosave-case"]
 
   postgres:
       container_name: postgres

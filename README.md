@@ -48,13 +48,13 @@ O projeto pode exigir algumas variáveis de ambiente para funcionar corretamente
 Para iniciar os serviços, execute o seguinte comando:
 
 ```bash
-make docker-up ou docker-compose up -d --build
+make docker-up | docker-compose up -d --build | docker compose up -d --build
 ```
 
 ## Passo 5: Executar o projeto
 
 Para executar o projeto, execute o seguinte comando: \
-Obs: precisa ter golang instalado na máquina versão minima 1.21.1
+Obs: precisa ter golang instalado na máquina versão minima 1.22.1
 
 ```bash
 make run-app

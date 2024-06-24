@@ -3,22 +3,38 @@ package routes
 import (
 	"fmt"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/authorhandler/authorroutes"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/healthcheck/healthroutes"
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/observability/metricsroutes"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
-	"net/http"
-
 	"github.com/go-chi/chi/v5"
+	"net/http"
 )
 
 type RegisterRoutes struct {
-	logger logger.ILogger
+	serverMux     *chi.Mux
+	authorRouters authorroutes.Routes
+	logger        logger.ILogger
 }
 
-func NewRegisterRoutes(logger logger.ILogger) *RegisterRoutes {
+func NewRegisterRoutes(
+	serverMux *chi.Mux,
+	authorRouters authorroutes.Routes,
+	logger logger.ILogger,
+) *RegisterRoutes {
 	return &RegisterRoutes{
-		logger: logger,
+		serverMux:     serverMux,
+		authorRouters: authorRouters,
+		logger:        logger,
 	}
 }
-func (r *RegisterRoutes) Register(serverMux *chi.Mux, router helpers.RouteType) {
+func (r *RegisterRoutes) RegisterRoutes() {
+	r.register(r.serverMux, r.authorRouters.AuthorRoutes())
+	r.register(r.serverMux, healthroutes.NewHealthCheckRoutes().HealthCheckRoutes())
+	r.register(r.serverMux, metricsrouter.NewMetricRouter().MetricRoutes())
+}
+
+func (r *RegisterRoutes) register(serverMux *chi.Mux, router helpers.RouteType) {
 	message, info := "[RegisterRoutes] ", "MAPPED_ROUTER"
 	for _, route := range router {
 		switch route.Type {
