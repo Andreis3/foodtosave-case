@@ -1,0 +1,62 @@
+name: store
+
+services:
+  foodtosave-case:
+    container_name: foodtosave-case
+    build:
+      target: builder
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+        - postgres
+        - redis
+    env_file:
+      - .env.dev
+    entrypoint: ["/go/bin/foodtosave-case"]
+
+  postgres:
+      container_name: postgres
+      image: postgres:16.2
+      environment:
+        POSTGRES_USER: root
+        POSTGRES_PASSWORD: root
+        POSTGRES_DB: food_db
+      ports:
+        - "5432:5432"
+      volumes:
+        - ./docs/sql/food_db.sql:/docker-entrypoint-initdb.d/init.sql
+      command: >
+        postgres -c 'max_connections=200'
+                 -c 'work_mem=50MB'
+                 -c 'maintenance_work_mem=1GB'
+  redis:
+    image: redis:6.0.9
+    container_name: redis
+    restart: always
+    ports:
+      - 6379:6379
+    command: redis-server --appendonly yes
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - 9090:9090
+    network_mode: host
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    depends_on:
+      - prometheus
+    network_mode: host
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_SECURITY_ADMIN_USER=admin
