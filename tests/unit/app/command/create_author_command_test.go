@@ -5,8 +5,8 @@ package command_test
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/app/command"
-	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
 	"github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/mapper"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -37,14 +37,12 @@ var _ = Describe("APP :: COMMAND :: CREATE_AUTHOR_WITH_BOOKS_COMMAND", func() {
 
 				Expect(err).To(BeNil())
 				Expect(result).ToNot(BeNil())
-				Expect(result).To(Equal(output))
+				Expect(result).To(Equal(mapper.MapperAggregateToDtoOutput(output)))
 			})
 
 			It("Should return error", func() {
 				usecaseMock, uuidMock, errContext := ContextCreateError()
 				command := command.NewCreateAuthorWithBooksCommand(usecaseMock, uuidMock)
-
-				agg := aggregate.NewAuthorBookAggregate(uuidMock)
 
 				input := dto.AuthorInput{
 					Name:        "Author 1",
@@ -60,7 +58,7 @@ var _ = Describe("APP :: COMMAND :: CREATE_AUTHOR_WITH_BOOKS_COMMAND", func() {
 						},
 					},
 				}
-				callExpected := agg.MapperDtoInputToAggregate(input)
+				callExpected := mapper.MapperDtoInputToAggregate(input)
 
 				result, err := command.Execute(input)
 

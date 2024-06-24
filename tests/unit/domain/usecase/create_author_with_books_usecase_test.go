@@ -28,13 +28,13 @@ var _ = Describe("DOMAIN :: USECASE :: CREATE_AUTHOR_WITH_BOOKS_USECASE", func()
 
 			agg := aggregate.AuthorBookAggregate{
 				Author: entity.Author{
-					ID:          "1",
+					ID:          "",
 					Name:        "Author 1",
 					Nationality: "Brazilian",
 				},
 				Books: []entity.Book{
 					{
-						ID:     "1",
+						ID:     "",
 						Title:  "Book 1",
 						Gender: "Terror",
 					},
@@ -47,8 +47,8 @@ var _ = Describe("DOMAIN :: USECASE :: CREATE_AUTHOR_WITH_BOOKS_USECASE", func()
 
 			Expect(err).To(BeNil())
 			Expect(out).ToNot(BeNil())
-			Expect(out.ID).To(Equal("1"))
-			Expect(out.Name).To(Equal("Author 1"))
+			Expect(out.Author.ID).To(Equal("1"))
+			Expect(out.Author.Name).To(Equal("Author 1"))
 			Expect(out.Books[0].ID).To(Equal("1"))
 			Expect(out.Books[0].Title).To(Equal("Book 1"))
 			Expect(out.Books[0].Gender).To(Equal("Terror"))

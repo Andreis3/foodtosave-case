@@ -5,8 +5,6 @@ package usecase_test
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/uow"
-	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/author"
-	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"github.com/andreis3/foodtosave-case/tests/mocks/infra/common/observabilitymock"
 	"github.com/andreis3/foodtosave-case/tests/mocks/infra/repository/postgres/authormock"
@@ -22,8 +20,8 @@ func ContextCreatedSuccess(authorRepoMock *authormock.AuthorRepositoryMock,
 	metrics *observabilitymock.PrometheusAdapterMock) *uowmock.UnitOfWorkMock {
 	unitOfWork := new(uowmock.UnitOfWorkMock)
 
-	authorRepoMock.On("InsertAuthor", mock.Anything).Return(&author.AuthorModel{}, (*util.ValidationError)(nil))
-	bookRepoMock.On("InsertBook", mock.Anything, mock.Anything).Return(&book.BookModel{}, (*util.ValidationError)(nil))
+	authorRepoMock.On("InsertAuthor", mock.Anything).Return("1", (*util.ValidationError)(nil))
+	bookRepoMock.On("InsertBook", mock.Anything, mock.Anything).Return("1", (*util.ValidationError)(nil))
 	redisMock.On("Set", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	metrics.On("HistogramOperationDuration", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 
@@ -50,8 +48,8 @@ func ContextReturnErrorAuthorRepositoryInsertAuthor(authorRepoMock *authormock.A
 		ClientError: []string{"Internal Server Error"},
 	}
 
-	authorRepoMock.On("InsertAuthor", mock.Anything).Return(&author.AuthorModel{}, err)
-	bookRepoMock.On("InsertBook", mock.Anything, mock.Anything).Return(&book.BookModel{}, (*util.ValidationError)(nil))
+	authorRepoMock.On("InsertAuthor", mock.Anything).Return("", err)
+	bookRepoMock.On("InsertBook", mock.Anything, mock.Anything).Return("", (*util.ValidationError)(nil))
 	redisMock.On("Set", mock.Anything, mock.Anything, mock.Anything).Return(nil)
 	metrics.On("HistogramOperationDuration", mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return(nil)
 

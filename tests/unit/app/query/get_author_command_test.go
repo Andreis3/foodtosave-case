@@ -27,11 +27,6 @@ var _ = Describe("APP :: COMMAND :: GET_ONE_AUTHOR_ALL_BOOKS_USECASE", func() {
 							Title:  "Book 1",
 							Gender: "Terror",
 						},
-						{
-							ID:     "2",
-							Title:  "Book 2",
-							Gender: "Comedy",
-						},
 					},
 				}
 

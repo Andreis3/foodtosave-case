@@ -3,6 +3,7 @@ package query
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/usecase"
 	"github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/mapper"
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
@@ -21,5 +22,5 @@ func (c *GetOneAuthorAllBooksQuery) Execute(id string) (dto.AuthorOutput, *util.
 	if err != nil {
 		return dto.AuthorOutput{}, err
 	}
-	return res, nil
+	return mapper.MapperAggregateToDtoOutput(res), nil
 }

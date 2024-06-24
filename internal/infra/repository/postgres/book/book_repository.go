@@ -11,7 +11,6 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
@@ -26,22 +25,20 @@ func NewBookRepository(metrics observability.IMetricAdapter) *BookRepository {
 		metrics: metrics,
 	}
 }
-func (r *BookRepository) InsertBook(data entity.Book, authorId string) (*BookModel, *util.ValidationError) {
+func (r *BookRepository) InsertBook(data entity.Book, authorId string) (string, *util.ValidationError) {
 	start := time.Now()
 	model := MapperBookModel(data, authorId)
-	query := `INSERT INTO books (id, title, gender, author_id, created_at, updated_at) 
-				VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`
-	rows, _ := r.DB.Query(context.Background(), query,
-		model.ID,
+	var bookId string
+	query := `INSERT INTO books (title, gender, author_id, created_at, updated_at) 
+				VALUES ($1, $2, $3, $4, $5) RETURNING id`
+	err := r.DB.QueryRow(context.Background(), query,
 		model.Title,
 		model.Gender,
 		model.AuthorID,
 		model.CreatedAt,
-		model.UpdatedAt)
-	defer rows.Close()
-	group, err := pgx.CollectOneRow[BookModel](rows, pgx.RowToStructByName[BookModel])
+		model.UpdatedAt).Scan(&bookId)
 	if errors.As(err, &r.PgError) {
-		return &BookModel{}, &util.ValidationError{
+		return "", &util.ValidationError{
 			Code:        fmt.Sprintf("PIDB-%s", r.Code),
 			Origin:      "BookRepository.InsertBook",
 			Status:      http.StatusInternalServerError,
@@ -52,7 +49,7 @@ func (r *BookRepository) InsertBook(data entity.Book, authorId string) (*BookMod
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "books", "insert", duration)
-	return &group, nil
+	return bookId, nil
 }
 func (r *BookRepository) SelectAllBooksByAuthorID(authorId string) ([]BookModel, *util.ValidationError) {
 	start := time.Now()

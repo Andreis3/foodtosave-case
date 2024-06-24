@@ -32,12 +32,12 @@ var _ = Describe("APP :: USECASE :: GET_ONE_AUTHOR_ALL_BOOKS_USECASE", func() {
 
 				Expect(err).To(BeNil())
 				Expect(out).ToNot(BeNil())
-				Expect(out.ID).To(Equal("1"))
-				Expect(out.Name).To(Equal("Author 1"))
-				Expect(out.Nationality).To(Equal("Brazilian"))
+				Expect(out.Author.ID).To(Equal("1"))
+				Expect(out.Author.Name).To(Equal("Author 1"))
+				Expect(out.Author.Nationality).To(Equal("test 1"))
 				Expect(out.Books[0].ID).To(Equal("1"))
-				Expect(out.Books[0].Title).To(Equal("Book 1"))
-				Expect(out.Books[0].Gender).To(Equal("Terror"))
+				Expect(out.Books[0].Title).To(Equal("test 1"))
+				Expect(out.Books[0].Gender).To(Equal("test 1"))
 			})
 
 			It("Should return data from postgres when the cache is empty", func() {
@@ -57,9 +57,9 @@ var _ = Describe("APP :: USECASE :: GET_ONE_AUTHOR_ALL_BOOKS_USECASE", func() {
 				Expect(err).To(BeNil())
 				Expect(out).ToNot(BeNil())
 
-				Expect(out.ID).To(Equal("1"))
-				Expect(out.Name).To(Equal("Author 1"))
-				Expect(out.Nationality).To(Equal("Brazilian"))
+				Expect(out.Author.ID).To(Equal("1"))
+				Expect(out.Author.Name).To(Equal("Author 1"))
+				Expect(out.Author.Nationality).To(Equal("Brazilian"))
 				Expect(out.Books[0].ID).To(Equal("1"))
 				Expect(out.Books[0].Title).To(Equal("Book 1"))
 				Expect(out.Books[0].ID).To(Equal("1"))

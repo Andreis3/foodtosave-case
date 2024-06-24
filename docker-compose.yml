@@ -1,8 +1,8 @@
 name: store
 
 services:
-  author-ms:
-    container_name: author-ms
+  foodtosave-case:
+    container_name: foodtosave-case
     build:
       target: builder
       context: .

@@ -5,21 +5,25 @@ package command_test
 
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
+	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/infra/dto"
+	"github.com/andreis3/foodtosave-case/internal/infra/mapper"
 	"github.com/andreis3/foodtosave-case/internal/util"
 	"github.com/andreis3/foodtosave-case/tests/mocks/domain/usecasemock"
 	"github.com/andreis3/foodtosave-case/tests/mocks/infra/common/uuidmock"
 	"github.com/stretchr/testify/mock"
 )
 
-func ContextCreateSuccess() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uuidmock.UUIDMock, dto.AuthorOutput) {
+func ContextCreateSuccess() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uuidmock.UUIDMock, aggregate.AuthorBookAggregate) {
 	authorWithBooksUsecaseMock := new(usecasemock.CreateAuthorWithBooksUsecaseMock)
 	uuidMock := new(uuidmock.UUIDMock)
-	output := dto.AuthorOutput{
-		ID:          "1",
-		Name:        "Author 1",
-		Nationality: "Brazilian",
-		Books: []dto.BookOutput{
+	output := aggregate.AuthorBookAggregate{
+		Author: entity.Author{
+			ID:          "1",
+			Name:        "Author 1",
+			Nationality: "Brazilian",
+		},
+		Books: []entity.Book{
 			{
 				ID:     "1",
 				Title:  "Book 1",
@@ -42,12 +46,11 @@ func ContextCreateSuccess() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uui
 func ContextCreateError() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uuidmock.UUIDMock, *util.ValidationError) {
 	authorWithBooksUsecaseMock := new(usecasemock.CreateAuthorWithBooksUsecaseMock)
 	uuidMock := new(uuidmock.UUIDMock)
-	output := dto.AuthorOutput{}
+	output := aggregate.AuthorBookAggregate{}
 
-	agg := aggregate.NewAuthorBookAggregate(uuidMock)
 	uuidMock.On("Generate").Return("111")
 
-	callExpected := agg.MapperDtoInputToAggregate(dto.AuthorInput{
+	callExpected := mapper.MapperDtoInputToAggregate(dto.AuthorInput{
 		Name:        "Author 1",
 		Nationality: "Brazilian",
 		Books: []dto.BookInput{

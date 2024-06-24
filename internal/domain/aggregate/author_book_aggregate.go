@@ -3,64 +3,24 @@ package aggregate
 import (
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/domain/errors"
-	"github.com/andreis3/foodtosave-case/internal/domain/uuid"
-	"github.com/andreis3/foodtosave-case/internal/infra/dto"
 )
 
 type AuthorBookAggregate struct {
-	Author        entity.Author
-	Books         []entity.Book
-	uuidGenerator uuid.IUUID
+	Author entity.Author
+	Books  []entity.Book
 }
 
-func NewAuthorBookAggregate(uuidGenerator uuid.IUUID) *AuthorBookAggregate {
+func NewAuthorBookAggregate() *AuthorBookAggregate {
 	return &AuthorBookAggregate{
-		Author:        entity.Author{},
-		Books:         []entity.Book{},
-		uuidGenerator: uuidGenerator,
+		Author: entity.Author{},
+		Books:  []entity.Book{},
 	}
 }
 func (a *AuthorBookAggregate) AddAuthorAndBooks(author entity.Author, books []entity.Book) {
 	a.Author = author
 	a.Books = books
 }
-func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto.AuthorInput) AuthorBookAggregate {
-	id := a.uuidGenerator.Generate()
-	a.Author = entity.Author{
-		ID:          id,
-		Name:        input.Name,
-		Nationality: input.Nationality,
-	}
-	a.Books = make([]entity.Book, len(input.Books))
-	for i, book := range input.Books {
-		a.Books[i] = entity.Book{
-			ID:     a.uuidGenerator.Generate(),
-			Title:  book.Title,
-			Gender: book.Gender,
-		}
-	}
-	return *a
-}
-func (a *AuthorBookAggregate) MapperToDtoOutput() dto.AuthorOutput {
-	output := dto.AuthorOutput{
-		ID:          a.Author.ID,
-		Name:        a.Author.Name,
-		Nationality: a.Author.Nationality,
-	}
 
-	for _, book := range a.Books {
-		output.Books = append(output.Books, struct {
-			ID     string `json:"id"`
-			Title  string `json:"title"`
-			Gender string `json:"gender"`
-		}{
-			ID:     book.ID,
-			Title:  book.Title,
-			Gender: book.Gender,
-		})
-	}
-	return output
-}
 func (a *AuthorBookAggregate) Validate() *errors.NotificationErrors {
 	authorValidate := a.Author.Validate()
 	if len(a.Books) == 0 {

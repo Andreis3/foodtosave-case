@@ -3,7 +3,8 @@ package authorhandler
 import (
 	"context"
 	"github.com/andreis3/foodtosave-case/internal/domain/observability"
-	"github.com/andreis3/foodtosave-case/internal/domain/uuid"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 

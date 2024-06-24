@@ -11,9 +11,9 @@ type AuthorRepositoryMock struct {
 	mock.Mock
 }
 
-func (r *AuthorRepositoryMock) InsertAuthor(data entity.Author) (*author.AuthorModel, *util.ValidationError) {
+func (r *AuthorRepositoryMock) InsertAuthor(data entity.Author) (string, *util.ValidationError) {
 	args := r.Called(data)
-	return args.Get(0).(*author.AuthorModel), args.Get(1).(*util.ValidationError)
+	return args.Get(0).(string), args.Get(1).(*util.ValidationError)
 }
 func (r *AuthorRepositoryMock) SelectOneAuthorByID(authorId string) (*author.AuthorModel, *util.ValidationError) {
 	args := r.Called(authorId)

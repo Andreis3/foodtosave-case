@@ -22,7 +22,7 @@ func ContextGetCacheSuccess(authorRepoMock *authormock.AuthorRepositoryMock,
 	metrics *observabilitymock.PrometheusAdapterMock) *uowmock.UnitOfWorkMock {
 	unitOfWork := new(uowmock.UnitOfWorkMock)
 
-	cache := `{"id":"1","name":"Author 1","nationality":"Brazilian","books":[{"id":"1","title":"Book 1","gender":"Terror"}]}`
+	cache := `{"Author":{"ID":"1","Name":"Author 1","Nationality":"test 1"},"Books":[{"ID":"1","Title":"test 1","Gender":"test 1"}]}`
 
 	authorRepoMock.On("SelectOneAuthorByID", mock.Anything).Return(&author.AuthorModel{}, (*util.ValidationError)(nil))
 	bookRepoMock.On("SelectAllBooksByAuthorID", mock.Anything).Return([]*book.BookModel{}, (*util.ValidationError)(nil))
