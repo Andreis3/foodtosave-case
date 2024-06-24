@@ -10,7 +10,10 @@ unit-tests-report:
 	&& go tool cover -html=coverage/cover.out -o coverage/cover.html \
 	&& go tool cover -func=coverage/cover.out -o coverage/cover.functions.html
 
+integration-tests:
+	@go test ./tests/integration/... --tags=integration -v -count=1
 .PHONY: run-app,
 		unit-tests,
 		unit-tests-cover,
 		unit-tests-report,
+		integration-tests,

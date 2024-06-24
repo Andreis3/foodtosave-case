@@ -42,7 +42,7 @@ func NewPostgresDB(conf configs.Conf) *Postgres {
 		connConfig.MaxConnLifetime = time.Duration(maxConnLifetime) * time.Minute
 		connConfig.MaxConnIdleTime = time.Duration(maxConnIdleTime) * time.Minute
 		connConfig.HealthCheckPeriod = 10 * time.Minute
-		connConfig.ConnConfig.RuntimeParams["application_name"] = "store-ms"
+		connConfig.ConnConfig.RuntimeParams["application_name"] = "foodtosave-case"
 		pool, err = pgxpool.NewWithConfig(context.Background(), connConfig)
 		if err != nil {
 			log.ErrorText(fmt.Sprintf("NotificationErrors creating connection pool: %v", err))
