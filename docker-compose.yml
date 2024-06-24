@@ -12,20 +12,20 @@ services:
         - postgres
         - redis
     environment:
-      SERVER_PORT: "8080"
-      POSTGRES_HOST: "localhost"
-      POSTGRES_PORT: "5432"
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "root"
-      POSTGRES_DB_NAME: "food_db"
-      POSTGRES_MAX_CONNECTIONS: "50"
-      POSTGRES_MIN_CONNECTIONS: "5"
-      POSTGRES_MAX_CONN_LIFETIME: "100"
-      POSTGRES_MAX_CONN_IDLE_TIME: "1"
-      REDIS_HOST: "localhost"
-      REDIS_PORT: "6379"
+      SERVER_PORT: 8080
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB_NAME: food_db
+      POSTGRES_MAX_CONNECTIONS: 50
+      POSTGRES_MIN_CONNECTIONS: 10
+      POSTGRES_MAX_CONN_LIFETIME: 100
+      POSTGRES_MAX_CONN_IDLE_TIME: 1
+      REDIS_HOST: localhost
+      REDIS_PORT: 6379
       REDIS_PASSWORD: ""
-      REDIS_DB: "0"
+      REDIS_DB: 0
     entrypoint: ["/go/bin/author-ms"]
 
   postgres:
