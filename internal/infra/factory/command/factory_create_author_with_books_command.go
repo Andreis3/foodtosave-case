@@ -22,6 +22,6 @@ func FactoryCreateAuthorWithBooksCommand(postgresDB db.IDatabase, redisDB db.IDa
 	uuidGenerator := uuid.NewUUID()
 	unitOfWork := uow.NewProxyUnitOfWork(postgresPool, prometheus)
 	createAuthorService := usecase.NewCreateAuthorWithBookUsecase(unitOfWork, cache, prometheus)
-	createAuthorCommand := command.NewCreateAuthorCommand(createAuthorService, uuidGenerator)
+	createAuthorCommand := command.NewCreateAuthorWithBooksCommand(createAuthorService, uuidGenerator)
 	return createAuthorCommand
 }

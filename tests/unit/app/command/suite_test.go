@@ -1,7 +1,7 @@
 //go:build unit
 // +build unit
 
-package entity_test
+package command_test
 
 import "testing"
 

@@ -20,6 +20,6 @@ func FactoryGetOneAuthorAllBooksQuery(postgresDB db.IDatabase, redisDB db.IDatab
 	cache := cache.NewCache(redisClient, prometheus, log)
 	unitOfWork := uow.NewProxyUnitOfWork(postgresPool, prometheus)
 	getOneAuthorService := usecase.NewGetOneAuthorAllBooksUsecase(unitOfWork, cache, prometheus)
-	getOneAuthorCommand := query.NewGetAuthorQuery(getOneAuthorService)
+	getOneAuthorCommand := query.NewGetOneAuthorAllBooksQuery(getOneAuthorService)
 	return getOneAuthorCommand
 }

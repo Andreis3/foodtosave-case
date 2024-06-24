@@ -25,8 +25,9 @@ func (a *AuthorBookAggregate) AddAuthorAndBooks(author entity.Author, books []en
 	a.Books = books
 }
 func (a *AuthorBookAggregate) MapperDtoInputToAggregate(input dto.AuthorInput) AuthorBookAggregate {
+	id := a.uuidGenerator.Generate()
 	a.Author = entity.Author{
-		ID:          a.uuidGenerator.Generate(),
+		ID:          id,
 		Name:        input.Name,
 		Nationality: input.Nationality,
 	}

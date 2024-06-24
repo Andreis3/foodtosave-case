@@ -6,9 +6,9 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
-type ICreateAuthorWithBooksService interface {
+type ICreateAuthorWithBooksUsecase interface {
 	CreateAuthorWithBooks(data aggregate.AuthorBookAggregate) (dto.AuthorOutput, *util.ValidationError)
 }
-type IGetOneAuthorAllBooksService interface {
+type IGetOneAuthorAllBooksUsecase interface {
 	GetOneAuthorAllBooks(id string) (dto.AuthorOutput, *util.ValidationError)
 }
