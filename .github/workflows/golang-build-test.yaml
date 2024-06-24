@@ -33,7 +33,7 @@ jobs:
       - name: Test Unit Cover
         run: make unit-tests-cover
       - name: Set up environment
-        run: docker compose -f docker-compose.yml up -d
+        run: docker compose -f docker-compose.git.yml up -d
 
       - name: Wait for docker to finish building
         run: sleep 5
