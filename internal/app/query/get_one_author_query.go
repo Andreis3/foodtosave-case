@@ -7,17 +7,17 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
-type GetOneAuthorAllBooksQuery struct {
+type GetOneAuthorQuery struct {
 	getOneAuthorService usecase.IGetOneAuthorAllBooksUsecase
 }
 
-func NewGetOneAuthorAllBooksQuery(getOneAuthorService usecase.IGetOneAuthorAllBooksUsecase) *GetOneAuthorAllBooksQuery {
-	return &GetOneAuthorAllBooksQuery{
+func NewGetOneAuthorAllBooksQuery(getOneAuthorService usecase.IGetOneAuthorAllBooksUsecase) *GetOneAuthorQuery {
+	return &GetOneAuthorQuery{
 		getOneAuthorService: getOneAuthorService,
 	}
 }
 
-func (c *GetOneAuthorAllBooksQuery) Execute(id string) (dto.AuthorOutput, *util.ValidationError) {
+func (c *GetOneAuthorQuery) Execute(id string) (dto.AuthorOutput, *util.ValidationError) {
 	res, err := c.getOneAuthorService.GetOneAuthorAllBooks(id)
 	if err != nil {
 		return dto.AuthorOutput{}, err

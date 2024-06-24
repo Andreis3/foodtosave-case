@@ -10,19 +10,19 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
-type CreateAuthorWithBooksCommand struct {
+type CreateAuthorCommand struct {
 	authorWithBooksUsecase usecase.ICreateAuthorWithBooksUsecase
 	uuidGenerator          uuid.IUUID
 }
 
-func NewCreateAuthorWithBooksCommand(authorService usecase.ICreateAuthorWithBooksUsecase, uuidGenerator uuid.IUUID) *CreateAuthorWithBooksCommand {
-	return &CreateAuthorWithBooksCommand{
+func NewCreateAuthorWithBooksCommand(authorService usecase.ICreateAuthorWithBooksUsecase, uuidGenerator uuid.IUUID) *CreateAuthorCommand {
+	return &CreateAuthorCommand{
 		authorWithBooksUsecase: authorService,
 		uuidGenerator:          uuidGenerator,
 	}
 }
 
-func (c *CreateAuthorWithBooksCommand) Execute(data dto.AuthorInput) (dto.AuthorOutput, *util.ValidationError) {
+func (c *CreateAuthorCommand) Execute(data dto.AuthorInput) (dto.AuthorOutput, *util.ValidationError) {
 	agg := mapper.MapperDtoInputToAggregate(data)
 	res, err := c.authorWithBooksUsecase.CreateAuthorWithBooks(agg)
 	if err != nil {
