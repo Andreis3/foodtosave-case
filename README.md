@@ -51,6 +51,14 @@ Para iniciar os serviços, execute o seguinte comando:
 make docker-up | docker-compose up -d --build | docker compose up -d --build
 ```
 
+## Passo 4.1: Baixar o ambiente
+
+Para iniciar os serviços, execute o seguinte comando:
+
+```bash
+make docker-down | docker-compose down | docker compose down
+```
+
 ## Passo 5: Executar o projeto
 
 Para executar o projeto, execute o seguinte comando: \
