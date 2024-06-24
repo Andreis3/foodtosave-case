@@ -18,14 +18,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 2,
+  "id": 1,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "cdpqy1cgoikg0d"
+        "uid": "edprg8guywydce"
       },
       "description": "",
       "fieldConfig": {
@@ -79,7 +79,7 @@
             "LoadBalancer": "app/081d39a1-prod-clientsapiin-6e48/c70081e3c5e9d373"
           },
           "editorMode": "code",
-          "expr": "sum(rate(request_duration_seconds_bucket{job=\"foodtosave-case\"}[1m])) * 60",
+          "expr": "sum(rate(request_duration_seconds_count{job=\"foodtosave-case\"}[1m])) * 60",
           "expression": "",
           "id": "",
           "interval": "",
@@ -101,10 +101,7 @@
       "type": "stat"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "cdpqy1cgoikg0d"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -212,10 +209,7 @@
       "type": "row"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "cdpqy1cgoikg0d"
-      },
+      "datasource": {},
       "description": "",
       "fieldConfig": {
         "defaults": {
@@ -381,10 +375,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "cdpqy1cgoikg0d"
-      },
+      "datasource": {},
       "description": "in de last minute",
       "fieldConfig": {
         "defaults": {
@@ -486,10 +477,7 @@
       "type": "timeseries"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "cdpqy1cgoikg0d"
-      },
+      "datasource": {},
       "description": "in de last minute",
       "fieldConfig": {
         "defaults": {
@@ -617,14 +605,14 @@
       "type": "row"
     }
   ],
-  "refresh": "auto",
+  "refresh": "10s",
   "schemaVersion": 39,
   "tags": [],
   "templating": {
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
   "timeRangeUpdatedDuringEditOrView": false,

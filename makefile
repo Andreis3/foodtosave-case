@@ -19,6 +19,9 @@ docker-up:
 docker-down:
 	@docker compose -f docker-compose.yml down
 
+tag:
+	scripts/bump_version.sh
+
 integration-tests:
 	@go test ./tests/integration/... --tags=integration -v -count=1
 .PHONY: run-app,
@@ -28,3 +31,4 @@ integration-tests:
 		integration-tests,
 		docker-dev,
 		docker-down,
+		tag,
