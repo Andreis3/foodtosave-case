@@ -32,16 +32,17 @@ func NewGetOneAuthorAllBooksUsecase(uow uow.IUnitOfWork, cache cache.ICache, met
 func (g *GetOneAuthorAllBooksUsecase) GetOneAuthorAllBooks(id string) (dto.AuthorOutput, *util.ValidationError) {
 	start := time.Now()
 	aggregateAuthor := new(aggregate.AuthorBookAggregate)
-	result, err := g.cache.Get(id)
-	if err == nil && result != "" {
+	result := g.cache.Get(id)
+	if result != "" {
 		var output dto.AuthorOutput
 		_ = json.Unmarshal([]byte(result), &output)
+
 		end := time.Now()
 		duration := float64(end.Sub(start).Milliseconds())
 		g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)
 		return output, nil
 	}
-	err = g.uow.Do(func(uow uow.IUnitOfWork) *util.ValidationError {
+	err := g.uow.Do(func(uow uow.IUnitOfWork) *util.ValidationError {
 		authorRepository := uow.GetRepository(util.AUTH_REPOSITORY_KEY).(author.IAuthorRepository)
 		bookRepository := uow.GetRepository(util.BOOK_REPOSITORY_KEY).(book.IBookRepository)
 		authorResult, err := authorRepository.SelectOneAuthorByID(id)
@@ -75,7 +76,7 @@ func (g *GetOneAuthorAllBooksUsecase) GetOneAuthorAllBooks(id string) (dto.Autho
 		return dto.AuthorOutput{}, err
 	}
 	output := aggregateAuthor.MapperToDtoOutput()
-	go g.cache.SetNX(id, output, 10)
+	go g.cache.Set(id, output, 10)
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	g.metrics.HistogramOperationDuration(context.Background(), "getOne", "author", duration)

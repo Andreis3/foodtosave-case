@@ -59,7 +59,7 @@ func (cas *CreateAuthorWithBookUsecase) CreateAuthorWithBooks(data aggregate.Aut
 	}
 	output := data.MapperToDtoOutput()
 	ttlCache := 10
-	go cas.cache.SetNX(output.ID, output, ttlCache)
+	go cas.cache.Set(output.ID, output, ttlCache)
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	cas.metrics.HistogramOperationDuration(context.Background(), "create", "authors", duration)
