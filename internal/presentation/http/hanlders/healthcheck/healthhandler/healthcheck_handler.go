@@ -3,10 +3,11 @@ package healthhandler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 	"net/http"
 	"runtime"
 	"time"
+
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 )
 
 type HealthCheckResponse struct {
@@ -27,7 +28,7 @@ type ComponentInfo struct {
 	ServiceName string `json:"service_name"`
 }
 
-func HealthCheck(w http.ResponseWriter, r *http.Request) {
+func HealthCheck(w http.ResponseWriter, _ *http.Request) {
 	systemInfo := getSystemInformation()
 	response := HealthCheckResponse{
 		Status:    http.StatusText(http.StatusOK),

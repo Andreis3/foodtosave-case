@@ -3,15 +3,16 @@ package server
 import (
 	"errors"
 	"fmt"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/redis"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/infra/setup"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"net/http"
-	"os"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -26,7 +27,7 @@ func Start(conf *configs.Conf, log *logger.Logger) {
 	pool := postgres.NewPostgresDB(*conf)
 	redis := redis.NewRedis(*conf)
 	go func() {
-		setup.SetupRoutesAndDependencies(mux, pool, redis, log)
+		setup.RoutesAndDependencies(mux, pool, redis, log)
 		end := time.Now()
 		ms := end.Sub(start).Milliseconds()
 		log.InfoText(fmt.Sprintf("Server started in %d ms", ms))
