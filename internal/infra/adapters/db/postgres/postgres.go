@@ -3,13 +3,14 @@ package postgres
 import (
 	"context"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
-	"github.com/andreis3/foodtosave-case/internal/util"
 	"os"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
+	"github.com/andreis3/foodtosave-case/internal/util"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgconn"
@@ -41,7 +42,7 @@ func NewPostgresDB(conf configs.Conf) *Postgres {
 		connConfig.MaxConns = int32(maxConns)
 		connConfig.MaxConnLifetime = time.Duration(maxConnLifetime) * time.Minute
 		connConfig.MaxConnIdleTime = time.Duration(maxConnIdleTime) * time.Minute
-		connConfig.HealthCheckPeriod = 10 * time.Minute
+		connConfig.HealthCheckPeriod = 1 * time.Minute
 		connConfig.ConnConfig.RuntimeParams["application_name"] = "foodtosave-case"
 		pool, err = pgxpool.NewWithConfig(context.Background(), connConfig)
 		if err != nil {

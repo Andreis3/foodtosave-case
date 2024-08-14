@@ -1,8 +1,9 @@
 package metricsrouter
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 	"net/http"
+
+	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

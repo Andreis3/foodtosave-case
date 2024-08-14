@@ -7,10 +7,11 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 
-	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
-	"github.com/andreis3/foodtosave-case/internal/infra/uow"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/redis/go-redis/v9"
+
+	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
+	"github.com/andreis3/foodtosave-case/internal/infra/uow"
 )
 
 func FactoryGetOneAuthorAllBooksQuery(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) query.IGetOneAuthorQuery {
