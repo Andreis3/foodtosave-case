@@ -1,7 +1,7 @@
 ##################################
 # STEP 1 build executable binary #
 ##################################
-FROM golang:1.22.1-alpine AS builder
+FROM golang:1.23.0-alpine AS builder
 
 WORKDIR /app
 COPY . .
@@ -25,7 +25,7 @@ RUN zip -q -r -0 /zoneinfo.zip .
 ##############################
 # STEP 3 build a small image #
 ##############################
-FROM scratch:latest
+FROM scratch
 
 # Copy our static executable.
 COPY --from=builder /go/bin/foodtosave-case /go/bin/foodtosave-case

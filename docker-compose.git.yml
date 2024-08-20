@@ -1,10 +1,9 @@
-name: store
+name: library
 
 services:
   foodtosave-case:
     container_name: foodtosave-case
     build:
-      target: builder
       context: .
     ports:
       - "8080:8080"
