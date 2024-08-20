@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"net/http"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgconn"
 )
@@ -28,14 +29,14 @@ func NewAuthorRepository(metrics observability.IMetricAdapter) *AuthorRepository
 func (r *AuthorRepository) InsertAuthor(data entity.Author) (string, *util.ValidationError) {
 	start := time.Now()
 	model := MapperAuthorModel(data)
-	var auhtorId string
+	var authorId string
 	query := `INSERT INTO authors (name, nationality, created_at, updated_at) 
 				VALUES ($1, $2, $3, $4 ) RETURNING id`
 	err := r.DB.QueryRow(context.Background(), query,
 		model.Name,
 		model.Nationality,
 		model.CreatedAt,
-		model.UpdatedAt).Scan(&auhtorId)
+		model.UpdatedAt).Scan(&authorId)
 
 	if errors.As(err, &r.PgError) {
 		return "", &util.ValidationError{
@@ -49,7 +50,7 @@ func (r *AuthorRepository) InsertAuthor(data entity.Author) (string, *util.Valid
 	end := time.Now()
 	duration := float64(end.Sub(start).Milliseconds())
 	r.metrics.HistogramInstructionTableDuration(context.Background(), "postgres", "author", "insert", duration)
-	return auhtorId, nil
+	return authorId, nil
 }
 func (r *AuthorRepository) SelectOneAuthorByID(authorId string) (*AuthorModel, *util.ValidationError) {
 	start := time.Now()

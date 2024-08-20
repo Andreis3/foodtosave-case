@@ -3,8 +3,9 @@ package helpers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
+
+	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
 func DecoderBodyRequest[T any](req *http.Request) (T, *util.ValidationError) {

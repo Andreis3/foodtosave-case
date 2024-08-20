@@ -1,10 +1,11 @@
 package authormock
 
 import (
+	"github.com/stretchr/testify/mock"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/author"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"github.com/stretchr/testify/mock"
 )
 
 type AuthorRepositoryMock struct {

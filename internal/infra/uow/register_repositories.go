@@ -4,11 +4,12 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
 
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/author"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"github.com/jackc/pgx/v5"
-	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 func NewProxyUnitOfWork(pool *pgxpool.Pool, metric observability.IMetricAdapter) *UnitOfWork {

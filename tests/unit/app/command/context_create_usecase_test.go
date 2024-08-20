@@ -14,8 +14,8 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func ContextCreateSuccess() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uuidmock.UUIDMock, aggregate.AuthorBookAggregate) {
-	authorWithBooksUsecaseMock := new(usecasemock.CreateAuthorWithBooksUsecaseMock)
+func ContextCreateSuccess() (*usecasemock.CreateAuthorWithBooksUseCaseMock, *uuidmock.UUIDMock, aggregate.AuthorBookAggregate) {
+	authorWithBooksUsecaseMock := new(usecasemock.CreateAuthorWithBooksUseCaseMock)
 	uuidMock := new(uuidmock.UUIDMock)
 	output := aggregate.AuthorBookAggregate{
 		Author: entity.Author{
@@ -43,8 +43,8 @@ func ContextCreateSuccess() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uui
 	return authorWithBooksUsecaseMock, uuidMock, output
 }
 
-func ContextCreateError() (*usecasemock.CreateAuthorWithBooksUsecaseMock, *uuidmock.UUIDMock, *util.ValidationError) {
-	authorWithBooksUsecaseMock := new(usecasemock.CreateAuthorWithBooksUsecaseMock)
+func ContextCreateError() (*usecasemock.CreateAuthorWithBooksUseCaseMock, *uuidmock.UUIDMock, *util.ValidationError) {
+	authorWithBooksUsecaseMock := new(usecasemock.CreateAuthorWithBooksUseCaseMock)
 	uuidMock := new(uuidmock.UUIDMock)
 	output := aggregate.AuthorBookAggregate{}
 

@@ -11,20 +11,20 @@ import (
 )
 
 type CreateAuthorCommand struct {
-	authorWithBooksUsecase usecase.ICreateAuthorWithBooksUsecase
+	authorWithBooksUseCase usecase.ICreateAuthorWithBooksUseCase
 	uuidGenerator          uuid.IUUID
 }
 
-func NewCreateAuthorWithBooksCommand(authorService usecase.ICreateAuthorWithBooksUsecase, uuidGenerator uuid.IUUID) *CreateAuthorCommand {
+func NewCreateAuthorWithBooksCommand(authorService usecase.ICreateAuthorWithBooksUseCase, uuidGenerator uuid.IUUID) *CreateAuthorCommand {
 	return &CreateAuthorCommand{
-		authorWithBooksUsecase: authorService,
+		authorWithBooksUseCase: authorService,
 		uuidGenerator:          uuidGenerator,
 	}
 }
 
 func (c *CreateAuthorCommand) Execute(data dto.AuthorInput) (dto.AuthorOutput, *util.ValidationError) {
 	agg := mapper.MapperDtoInputToAggregate(data)
-	res, err := c.authorWithBooksUsecase.CreateAuthorWithBooks(agg)
+	res, err := c.authorWithBooksUseCase.CreateAuthorWithBooks(agg)
 	if err != nil {
 		return dto.AuthorOutput{}, err
 	}

@@ -2,6 +2,7 @@ package observabilitymock
 
 import (
 	"context"
+
 	"github.com/stretchr/testify/mock"
 )
 

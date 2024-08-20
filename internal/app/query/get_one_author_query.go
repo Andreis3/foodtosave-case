@@ -8,10 +8,10 @@ import (
 )
 
 type GetOneAuthorQuery struct {
-	getOneAuthorService usecase.IGetOneAuthorAllBooksUsecase
+	getOneAuthorService usecase.IGetOneAuthorAllBooksUseCase
 }
 
-func NewGetOneAuthorAllBooksQuery(getOneAuthorService usecase.IGetOneAuthorAllBooksUsecase) *GetOneAuthorQuery {
+func NewGetOneAuthorAllBooksQuery(getOneAuthorService usecase.IGetOneAuthorAllBooksUseCase) *GetOneAuthorQuery {
 	return &GetOneAuthorQuery{
 		getOneAuthorService: getOneAuthorService,
 	}

@@ -1,9 +1,10 @@
 package book
 
 import (
+	"time"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"time"
 )
 
 type BookModel struct {

@@ -1,9 +1,10 @@
 package healthroutes
 
 import (
+	"net/http"
+
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/healthcheck/healthhandler"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
-	"net/http"
 )
 
 type HealthCheckRouter struct{}

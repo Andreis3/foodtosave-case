@@ -2,9 +2,11 @@ package redis
 
 import (
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
-	"github.com/redis/go-redis/v9"
 	"strconv"
+
+	"github.com/redis/go-redis/v9"
+
+	"github.com/andreis3/foodtosave-case/internal/infra/common/configs"
 )
 
 type Redis struct {

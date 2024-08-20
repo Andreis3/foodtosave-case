@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"net/http"
-	"time"
 
 	"github.com/jackc/pgx/v5/pgconn"
 )

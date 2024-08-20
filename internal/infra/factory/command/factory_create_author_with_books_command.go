@@ -7,11 +7,12 @@ import (
 	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/redis/go-redis/v9"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/common/uuid"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/redis/cache"
 	"github.com/andreis3/foodtosave-case/internal/infra/uow"
-	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/redis/go-redis/v9"
 )
 
 func FactoryCreateAuthorWithBooksCommand(postgresDB db.IDatabase, redisDB db.IDatabase, prometheus observability.IMetricAdapter) command.ICreateAuthorCommand {
@@ -21,7 +22,7 @@ func FactoryCreateAuthorWithBooksCommand(postgresDB db.IDatabase, redisDB db.IDa
 	cache := cache.NewCache(redisClient, prometheus, log)
 	uuidGenerator := uuid.NewUUID()
 	unitOfWork := uow.NewProxyUnitOfWork(postgresPool, prometheus)
-	createAuthorService := usecase.NewCreateAuthorWithBookUsecase(unitOfWork, cache, prometheus)
+	createAuthorService := usecase.NewCreateAuthorWithBookUseCase(unitOfWork, cache, prometheus)
 	createAuthorCommand := command.NewCreateAuthorWithBooksCommand(createAuthorService, uuidGenerator)
 	return createAuthorCommand
 }

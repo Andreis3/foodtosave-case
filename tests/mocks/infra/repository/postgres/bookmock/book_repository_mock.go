@@ -1,10 +1,11 @@
 package bookmock
 
 import (
+	"github.com/stretchr/testify/mock"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/infra/repository/postgres/book"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"github.com/stretchr/testify/mock"
 )
 
 type BookRepositoryMock struct {

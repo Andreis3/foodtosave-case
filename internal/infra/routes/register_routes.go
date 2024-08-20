@@ -2,13 +2,15 @@ package routes
 
 import (
 	"fmt"
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/authorhandler/authorroutes"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/healthcheck/healthroutes"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/observability/metricsroutes"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
-	"github.com/go-chi/chi/v5"
-	"net/http"
 )
 
 type RegisterRoutes struct {

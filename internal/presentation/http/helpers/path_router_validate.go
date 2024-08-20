@@ -1,8 +1,9 @@
 package helpers
 
 import (
-	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
+
+	"github.com/andreis3/foodtosave-case/internal/util"
 
 	"github.com/google/uuid"
 )

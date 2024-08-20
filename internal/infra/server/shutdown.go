@@ -3,15 +3,16 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
-	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/redis"
-	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
-	"github.com/andreis3/foodtosave-case/internal/util"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
+
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/postgres"
+	"github.com/andreis3/foodtosave-case/internal/infra/adapters/db/redis"
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
+	"github.com/andreis3/foodtosave-case/internal/util"
 )
 
 func gracefulShutdown(server *http.Server, pool *postgres.Postgres, redis *redis.Redis, log *logger.Logger) {

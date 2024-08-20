@@ -2,9 +2,10 @@ package uow
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/uow"
 	"github.com/andreis3/foodtosave-case/internal/util"
-	"net/http"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"

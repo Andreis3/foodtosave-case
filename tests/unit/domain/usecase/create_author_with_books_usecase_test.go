@@ -4,6 +4,9 @@
 package usecase_test
 
 import (
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/aggregate"
 	"github.com/andreis3/foodtosave-case/internal/domain/entity"
 	"github.com/andreis3/foodtosave-case/internal/domain/usecase"
@@ -12,8 +15,6 @@ import (
 	"github.com/andreis3/foodtosave-case/tests/mocks/infra/repository/postgres/authormock"
 	"github.com/andreis3/foodtosave-case/tests/mocks/infra/repository/postgres/bookmock"
 	"github.com/andreis3/foodtosave-case/tests/mocks/infra/repository/redis/cachemock"
-	. "github.com/onsi/ginkgo/v2"
-	. "github.com/onsi/gomega"
 )
 
 var _ = Describe("DOMAIN :: USECASE :: CREATE_AUTHOR_WITH_BOOKS_USECASE", func() {
@@ -41,7 +42,7 @@ var _ = Describe("DOMAIN :: USECASE :: CREATE_AUTHOR_WITH_BOOKS_USECASE", func()
 				},
 			}
 
-			usecase := usecase.NewCreateAuthorWithBookUsecase(unitOfWorkMock, redisMock, metrics)
+			usecase := usecase.NewCreateAuthorWithBookUseCase(unitOfWorkMock, redisMock, metrics)
 
 			out, err := usecase.CreateAuthorWithBooks(agg)
 
@@ -78,7 +79,7 @@ var _ = Describe("DOMAIN :: USECASE :: CREATE_AUTHOR_WITH_BOOKS_USECASE", func()
 				},
 			}
 
-			usecase := usecase.NewCreateAuthorWithBookUsecase(unitOfWorkMock, redisMock, metrics)
+			usecase := usecase.NewCreateAuthorWithBookUseCase(unitOfWorkMock, redisMock, metrics)
 
 			out, err := usecase.CreateAuthorWithBooks(agg)
 

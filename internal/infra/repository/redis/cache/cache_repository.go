@@ -3,10 +3,12 @@ package cache
 import (
 	"context"
 	"encoding/json"
+	"time"
+
+	"github.com/redis/go-redis/v9"
+
 	"github.com/andreis3/foodtosave-case/internal/domain/observability"
 	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
-	"github.com/redis/go-redis/v9"
-	"time"
 )
 
 type Cache struct {

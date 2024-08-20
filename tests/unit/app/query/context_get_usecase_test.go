@@ -10,8 +10,8 @@ import (
 	"github.com/andreis3/foodtosave-case/tests/mocks/domain/usecasemock"
 )
 
-func ContextGetSuccess() *usecasemock.GetOneAuthorAllBooksUsecaseMock {
-	authorWithBooksUsecaseMock := new(usecasemock.GetOneAuthorAllBooksUsecaseMock)
+func ContextGetSuccess() *usecasemock.GetOneAuthorAllBooksUseCaseMock {
+	authorWithBooksUsecaseMock := new(usecasemock.GetOneAuthorAllBooksUseCaseMock)
 	output := aggregate.AuthorBookAggregate{
 		Author: entity.Author{
 			ID:          "1",
@@ -32,8 +32,8 @@ func ContextGetSuccess() *usecasemock.GetOneAuthorAllBooksUsecaseMock {
 	return authorWithBooksUsecaseMock
 }
 
-func ContextGetError() (*usecasemock.GetOneAuthorAllBooksUsecaseMock, *util.ValidationError) {
-	authorWithBooksUsecaseMock := new(usecasemock.GetOneAuthorAllBooksUsecaseMock)
+func ContextGetError() (*usecasemock.GetOneAuthorAllBooksUseCaseMock, *util.ValidationError) {
+	authorWithBooksUsecaseMock := new(usecasemock.GetOneAuthorAllBooksUseCaseMock)
 	output := aggregate.AuthorBookAggregate{}
 
 	err := &util.ValidationError{
