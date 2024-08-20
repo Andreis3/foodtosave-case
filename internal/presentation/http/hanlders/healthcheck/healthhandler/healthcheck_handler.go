@@ -35,7 +35,7 @@ func HealthCheck(w http.ResponseWriter, _ *http.Request) {
 		Timestamp: time.Now().Format(time.RFC3339),
 		System:    systemInfo,
 		Component: ComponentInfo{
-			ServiceName: "store-ms",
+			ServiceName: "library-api",
 		},
 	}
 	jsonResponse, err := json.Marshal(response)
