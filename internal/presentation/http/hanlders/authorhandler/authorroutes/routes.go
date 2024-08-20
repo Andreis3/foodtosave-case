@@ -1,23 +1,30 @@
 package authorroutes
 
 import (
+	"net/http"
+
+	"github.com/andreis3/foodtosave-case/internal/infra/common/logger"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/hanlders/authorhandler"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/helpers"
 	"github.com/andreis3/foodtosave-case/internal/presentation/http/middleware"
-	"net/http"
 )
 
 type Routes struct {
 	createAuthorHandler authorhandler.CreateAuthorWithBooksHandler
 	getOneAuthorHandler authorhandler.GetOneAuthorAllBooksHandler
+	one                 *middleware.MiddlewareOne
+	two                 *middleware.MiddlewareTwo
 }
 
 func NewAuthorRoutes(
 	createAuthorHandler authorhandler.CreateAuthorWithBooksHandler,
 	getOneAuthorHandler authorhandler.GetOneAuthorAllBooksHandler) *Routes {
+	log := logger.NewLogger()
 	return &Routes{
 		createAuthorHandler: createAuthorHandler,
 		getOneAuthorHandler: getOneAuthorHandler,
+		one:                 middleware.NewMiddlewareOne(log),
+		two:                 middleware.NewMiddlewareTwo(log),
 	}
 }
 
@@ -30,7 +37,8 @@ func (r *Routes) AuthorRoutes() helpers.RouteType {
 			Description: "Create Author with Books",
 			Type:        helpers.HANDLER_FUNC,
 			Middlewares: []func(http.Handler) http.Handler{
-				middleware.ValidatePath,
+				r.two.Two,
+				r.one.One,
 			},
 		},
 		{
